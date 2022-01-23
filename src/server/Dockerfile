@@ -2,17 +2,14 @@
 
 # minimal golang image for building
 FROM golang:1.16-alpine as build
-WORKDIR /go/src
+WORKDIR /go/src/sonic-server
 
-# install dependencies
-COPY go.mod ./
-COPY go.sum ./
-RUN go mod download
+# copy src and install dependencies
+COPY . .
+RUN go get -d -v ./...
 
-# copy src and build
-COPY *.go ./
-RUN go build -o build/sonic
-
+# build
+RUN go build -o build/sonic-server
 
 # alpine image for running
 FROM alpine
@@ -21,8 +18,8 @@ FROM alpine
 RUN apk add --no-cache ca-certificates && update-ca-certificates
 
 # copy binary
-COPY --from=build /go/src/build/sonic /usr/bin/sonic
+COPY --from=build /go/src/sonic-server/build/sonic-server /usr/bin/sonic-server
 
 # run on port 8080
 EXPOSE 8080
-ENTRYPOINT ["/usr/bin/sonic"]
+ENTRYPOINT ["/usr/bin/sonic-server"]
