@@ -1,3 +1,5 @@
+-- insert some test data to ensure table validity
+
 INSERT INTO users (name, phone_number, covid_positive)
 VALUES
 (
@@ -5,7 +7,6 @@ VALUES
     '0851234123',
     FALSE
 );
-
 INSERT INTO locations (name, coords)
 VALUES
 (
