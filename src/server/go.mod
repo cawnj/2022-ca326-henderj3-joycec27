@@ -1,4 +1,4 @@
-module gitlab.computing.dcu.ie/joycec27/2022-ca326-henderj3-joycec27
+module sonic-server
 
 go 1.17
 

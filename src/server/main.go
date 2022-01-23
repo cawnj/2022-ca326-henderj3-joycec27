@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 
+	"sonic-server/db"
+
 	"github.com/go-chi/chi"
 )
 
@@ -14,8 +16,14 @@ func main() {
 		fmt.Fprint(w, "Alive!")
 	})
 
-	fmt.Println("Server starting at http://localhost:8080")
-	err := http.ListenAndServe(":8080", router)
+	log.Println("Attemping connection to database")
+	_, err := db.Initialize()
+	if err != nil {
+		log.Fatalf("Database connection failed: %v", err)
+	}
+
+	log.Println("Server starting at http://localhost:8080")
+	err = http.ListenAndServe(":8080", router)
 	if err != nil {
 		log.Fatalf("Error starting server: %s", err)
 	}
