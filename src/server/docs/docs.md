@@ -7,7 +7,11 @@
   - e.g. POSTGRES_USER, POSTGRES_PASSWORD, etc.
 
 ### golang-migrate
-- Install with:
+- Install:
   - `brew install golang-migrate`
-- Create migrations with:
+- Create migration files:
   - `migrate create -ext sql -dir db/migrations -seq TABLE_NAME`
+- Perform a migration:
+  - `migrate -database $(DB_URL) -path db/migrations up`
+- Force migration:
+  - `migrate -database $(DB_URL) -path db/migrations force ${MIGRATION_NUM}`
