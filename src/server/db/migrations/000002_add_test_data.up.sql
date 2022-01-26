@@ -13,3 +13,10 @@ VALUES
     'The Spire',
     ST_SetSRID(ST_MakePoint(53.3498133103617, -6.260254521788297), 4326)
 );
+INSERT INTO entry_log (user_id, location_id, timestamp)
+VALUES
+(
+    1,
+    1,
+    DATE_TRUNC('second', NOW()::timestamp)
+);

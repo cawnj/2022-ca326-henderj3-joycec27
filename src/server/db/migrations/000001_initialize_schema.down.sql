@@ -1,3 +1,3 @@
 -- drop all our tables
 
-DROP TABLE IF EXISTS users, locations;
+DROP TABLE IF EXISTS users, locations, entry_log;
