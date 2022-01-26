@@ -14,4 +14,4 @@ DB_URL := postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/${POST
 migrate:
 	@migrate -database $(DB_URL) -path db/migrations up
 migrate-down:
-	@migrate -database $(DB_URL) -path db/migrations down
+	@migrate -database $(DB_URL) -path db/migrations down -all
