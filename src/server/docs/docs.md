@@ -15,3 +15,9 @@
   - `migrate -database $(DB_URL) -path db/migrations up`
 - Force migration:
   - `migrate -database $(DB_URL) -path db/migrations force ${MIGRATION_NUM}`
+
+### Creating endpoints
+- Add router to `handler.go`
+- Create function in `handler` folder
+- Create database query function in `db` folder
+  - This also requires a valid model/struct to match the query return content
