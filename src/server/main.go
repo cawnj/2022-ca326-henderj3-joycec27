@@ -3,40 +3,53 @@ package main
 import (
 	"fmt"
 	"log"
+	"net"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"context"
+	"time"
 
 	"sonic-server/db"
-	"sonic-server/models"
-
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
-	"github.com/go-chi/render"
+	"sonic-server/handler"
 )
 
+const PORT = ":8080"
+
 func main() {
-	r := chi.NewRouter()
-	r.Use(middleware.Logger)
-	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "Alive!")
-	})
-	r.Post("/user", func(w http.ResponseWriter, r *http.Request) {
-		data := &models.User{}
-		if err := render.Bind(r, data); err != nil {
-			fmt.Fprint(w, "Error")
-			return
-		}
-		render.JSON(w, r, data)
-	})
-
-	log.Println("Attemping connection to database")
-	_, err := db.Initialize()
+	listener, err := net.Listen("tcp", PORT)
 	if err != nil {
-		log.Fatalf("Database connection failed: %v", err)
+		log.Fatalf("Error creating listener: %s", err.Error())
 	}
 
-	log.Println("Server starting at http://localhost:8080")
-	err = http.ListenAndServe(":8080", r)
+	db, err := db.Initialize()
 	if err != nil {
-		log.Fatalf("Error starting server: %s", err)
+		log.Fatalf("Error initializing database: %v", err)
 	}
+	defer db.Conn.Close()
+
+	httpHandler := handler.NewHandler(db)
+	server := &http.Server{
+		Handler: httpHandler,
+	}
+    go func() {
+        server.Serve(listener)
+    }()
+	defer Stop(server)
+	log.Printf("Started server at http://localhost%s", PORT)
+
+    ch := make(chan os.Signal, 1)
+    signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
+    log.Println(fmt.Sprint(<-ch))
+    log.Println("Stopping API server.")
+}
+
+func Stop(server *http.Server) {
+    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+    defer cancel()
+    if err := server.Shutdown(ctx); err != nil {
+        log.Printf("Could not shut down server correctly: %v\n", err)
+        os.Exit(1)
+    }
 }
