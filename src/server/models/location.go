@@ -3,14 +3,12 @@ package models
 import (
 	"fmt"
 	"net/http"
-
-	geo "github.com/kellydunn/golang-geo"
 )
 
 type Location struct {
-	ID     int       `json:"id"`
-	Name   string    `json:"name"`
-	Coords geo.Point `json:"coords"`
+	ID     int    `json:"id"`
+	Name   string `json:"name"`
+	Coords string `json:"coords"`
 }
 
 type LocationList struct {
