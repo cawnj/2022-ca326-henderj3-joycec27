@@ -12,6 +12,16 @@ build:
 
 DB_URL := postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/${POSTGRES_DB}?sslmode=disable
 migrate:
-	@migrate -database $(DB_URL) -path db/migrations up
+	@docker run \
+	-v `pwd`/db/migrations:/migrations \
+	--network host migrate/migrate \
+	-database $(DB_URL) \
+	-path /migrations \
+	up
 migrate-down:
-	@migrate -database $(DB_URL) -path db/migrations down -all
+	@docker run \
+	-v `pwd`/db/migrations:/migrations \
+	--network host migrate/migrate \
+	-database $(DB_URL) \
+	-path /migrations \
+	down -all
