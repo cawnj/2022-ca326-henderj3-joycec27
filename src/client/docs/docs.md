@@ -15,3 +15,11 @@ Following guide [here](https://littlebirdelectronics.com.au/guides/181/nfc-modul
     - `sudo make install`
 - Copy `libnfc.conf` to /etc/nfc/
 - Set jumpers/switches on device, guide [here](https://www.waveshare.com/wiki/PN532_NFC_HAT)
+
+### NTAG215 Card
+Datasheet [here](https://www.nxp.com/docs/en/data-sheet/NTAG213_215_216.pdf)
+Adafruit library [here](https://github.com/adafruit/Adafruit_CircuitPython_PN532)
+- Pages/Blocks 0-3,130-134 are reserved
+- Reset Pin = D20; Request Pin = D16;
+- Where data is a bytearray(4) or x.to_bytes(4, 'big'):
+  - `pn532.ntag2xx_write_block(block_num, data)`
