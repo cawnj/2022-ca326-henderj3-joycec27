@@ -1,4 +1,4 @@
-# Sonic
+# Sonic Server
 
 ## Documentation/Help
 
@@ -15,6 +15,15 @@
   - `migrate -database $(DB_URL) -path db/migrations up`
 - Force migration:
   - `migrate -database $(DB_URL) -path db/migrations force ${MIGRATION_NUM}`
+- **NOTE**: Have now switched to using the migrate/migrate docker image instead
+  ```
+  docker run \
+	-v `pwd`/db/migrations:/migrations \
+	--network host migrate/migrate \
+	-database $(DB_URL) \
+	-path /migrations \
+	up
+  ```
 
 ### Creating endpoints
 - Add router to `handler.go`
