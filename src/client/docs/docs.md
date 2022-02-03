@@ -23,3 +23,28 @@ Adafruit library [here](https://github.com/adafruit/Adafruit_CircuitPython_PN532
 - Reset Pin = D20; Request Pin = D16;
 - Where data is a bytearray(4) or x.to_bytes(4, 'big'):
   - `pn532.ntag2xx_write_block(block_num, data)`
+
+### nfcpy
+- `pip install nfcpy`
+- PN532 set to UART (this is a serial input at /dev/ttyS0)
+- Testing connection:
+  ```
+  clf = nfc.ContactlessFrontend()
+  clf.open('tty:S0:pn532')
+  clf.close()
+  ```
+
+### ndeflib
+- `pip install ndeflib`
+- Can use this tool [here](https://github.com/nfcpy/nfcpy/blob/master/examples/tagtool.py) to dump, load, write, format
+- `python3 tagtool.py --device tty:S0:pn532 <command>`
+- Useful usage stuff:
+  ```
+  clf = nfc.ContactlessFrontend('tty:S0:pn532')
+  target = clf.sense(RemoteTarget('106A'))
+  tag = nfc.tag.activate(clf, target)
+  tag.format()
+  records = tag.ndef.records
+  ndef.TextRecord("Hello world!")
+  tag.ndef.records += [record]
+  ```
