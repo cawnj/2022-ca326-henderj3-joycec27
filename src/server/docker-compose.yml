@@ -10,6 +10,8 @@ services:
       - 5432:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal
 
   server:
     build:
@@ -22,6 +24,11 @@ services:
     - 8080:8080
     depends_on:
       - db
+    networks:
+      - internal
 
 volumes:
   postgres_data:
+
+networks:
+  internal:
