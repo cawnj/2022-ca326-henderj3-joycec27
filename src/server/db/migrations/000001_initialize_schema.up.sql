@@ -15,5 +15,6 @@ CREATE TABLE IF NOT EXISTS entry_log(
   entry_id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users (user_id),
   location_id INTEGER REFERENCES locations (location_id),
-  timestamp TIMESTAMP
+  entry_time TIMESTAMP,
+  exit_time TIMESTAMP
 );
