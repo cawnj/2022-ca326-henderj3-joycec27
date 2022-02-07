@@ -34,14 +34,13 @@ def get_user_id(tag):
     return int(read_tag(tag))
 
 def send_post_request(user_id):
-    data = {
+    payload = {
         "user_id": user_id,
         "location_id": LOCATION_ID,
-        "entry_time": strftime("%Y-%m-%d %H:%M:%S", gmtime()),
-        "exit_time": "3000-01-01 00:00:00"
+        "timestamp": strftime("%Y-%m-%d %H:%M:%S", gmtime()),
     }
-    print(data)
-    response = requests.post(url=API_ENDPOINT, json=data)
+    print(payload)
+    response = requests.post(url=API_ENDPOINT, json=payload)
     try:
         print(response.json())
     except:
