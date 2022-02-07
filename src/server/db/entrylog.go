@@ -39,3 +39,23 @@ func (db Database) AddEntryLog(entryLog *models.EntryLog) error {
 	entryLog.EntryID = id
 	return nil
 }
+
+func (db Database) UpdateEntryLog(entryLog *models.EntryLog) error {
+	var id int
+	query := `UPDATE entry_log
+	SET exit_time = $2::timestamp
+	WHERE user_id = $1
+	ORDER BY entry_time DESC
+	LIMIT 1
+	RETURNING entry_id`
+	err := db.Conn.QueryRow(
+		query,
+		entryLog.UserID,
+		entryLog.ExitTime,
+	).Scan(&id)
+	if err != nil {
+		return err
+	}
+	entryLog.EntryID = id
+	return nil
+}
