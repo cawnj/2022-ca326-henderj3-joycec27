@@ -62,8 +62,12 @@ func (db Database) GetLatestEntryLog(userId int) (*models.EntryLog, error) {
 		&entryLog.EntryTime,
 		&entryLog.ExitTime,
 	)
-	if err != nil {
+	switch {
+	case err == sql.ErrNoRows:
+		return nil, nil
+	case err != nil:
 		return nil, err
+	default:
+		return entryLog, nil
 	}
-	return entryLog, nil
 }

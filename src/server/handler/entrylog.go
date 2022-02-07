@@ -32,7 +32,9 @@ func writeEntryLog(w http.ResponseWriter, r *http.Request) {
 		LocationID: entryLogReq.LocationID,
 	}
 
-	if latestEntryLog.ExitTime.Valid { // is the exit time not NULL
+	// if this user does not have an entry log OR
+	//   this user's latest entry log includes an exit time
+	if latestEntryLog == nil || latestEntryLog.ExitTime.Valid {
 		entryLog.EntryTime = sql.NullString{
 			String: entryLogReq.Timestamp,
 			Valid:  true,
