@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"database/sql"
 	"net/http"
 
 	"sonic-server/models"
@@ -14,20 +15,34 @@ func entrylog(router chi.Router) {
 }
 
 func writeEntryLog(w http.ResponseWriter, r *http.Request) {
-	entryLog := &models.EntryLog{} // TODO: change to request struct
-	if err := render.Bind(r, entryLog); err != nil {
+	entryLogReq := &models.EntryLogRequest{}
+	if err := render.Bind(r, entryLogReq); err != nil {
 		render.Render(w, r, ErrBadRequest)
 		return
 	}
 
-	latestEntryLog, err := dbInstance.GetLatestEntryLog(entryLog.UserID)
+	latestEntryLog, err := dbInstance.GetLatestEntryLog(entryLogReq.UserID)
 	if err != nil {
 		render.Render(w, r, ErrorRenderer(err))
 		return
 	}
+
+	entryLog := &models.EntryLog{
+		UserID:     entryLogReq.UserID,
+		LocationID: entryLogReq.LocationID,
+	}
+
 	if latestEntryLog.ExitTime.Valid { // is the exit time not NULL
+		entryLog.EntryTime = sql.NullString{
+			String: entryLogReq.Timestamp,
+			Valid:  true,
+		}
 		createEntryLog(w, r, entryLog)
 	} else {
+		entryLog.ExitTime = sql.NullString{
+			String: entryLogReq.Timestamp,
+			Valid:  true,
+		}
 		updateEntryLog(w, r, entryLog)
 	}
 
