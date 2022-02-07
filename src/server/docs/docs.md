@@ -30,3 +30,8 @@
 - Create function in `handler` folder
 - Create database query function in `db` folder
   - This also requires a valid model/struct to match the query return content
+
+### Keeping master and external branches in check
+- `git pull` in master branch
+- `git checkout external`
+- `git rebase master` and fix and conflicts if any pop up
