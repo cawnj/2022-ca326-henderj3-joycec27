@@ -49,3 +49,12 @@ Adafruit library [here](https://github.com/adafruit/Adafruit_CircuitPython_PN532
   ndef.TextRecord("Hello world!")
   tag.ndef.records += [record]
   ```
+
+### Expected POST request body
+```
+{
+  "user_id": scanned_from_card,
+  "location_id": constant_in_scanner_script,
+  "timestamp": current_time
+}
+```
