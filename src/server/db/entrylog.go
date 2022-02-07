@@ -60,3 +60,24 @@ func (db Database) UpdateEntryLog(entryLog *models.EntryLog) error {
 	entryLog.EntryID = id
 	return nil
 }
+
+func (db Database) GetLatestEntryLog(userId int) (*models.DBEntryLog, error) {
+	entryLog := &models.DBEntryLog{}
+	query := `SELECT * FROM entry_log
+	WHERE entry_id = (
+		SELECT max(entry_id)
+		FROM entry_log
+		WHERE user_id = $1
+	)`
+	err := db.Conn.QueryRow(query, userId).Scan(
+		&entryLog.EntryID,
+		&entryLog.UserID,
+		&entryLog.LocationID,
+		&entryLog.EntryTime,
+		&entryLog.ExitTime,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return entryLog, nil
+}

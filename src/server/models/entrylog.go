@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
 )
@@ -11,6 +12,14 @@ type EntryLog struct {
 	LocationID int    `json:"location_id"`
 	EntryTime  string `json:"entry_time"`
 	ExitTime   string `json:"exit_time"`
+}
+
+type DBEntryLog struct {
+	EntryID    int            `json:"entry_id"`
+	UserID     int            `json:"user_id"`
+	LocationID int            `json:"location_id"`
+	EntryTime  sql.NullString `json:"entry_time"`
+	ExitTime   sql.NullString `json:"exit_time"`
 }
 
 type EntryLogList struct {
@@ -32,5 +41,9 @@ func (*EntryLogList) Render(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (*EntryLog) Render(w http.ResponseWriter, r *http.Request) error {
+	return nil
+}
+
+func (*DBEntryLog) Render(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
