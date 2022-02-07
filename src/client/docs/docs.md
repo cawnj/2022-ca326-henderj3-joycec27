@@ -15,6 +15,7 @@ Following guide [here](https://littlebirdelectronics.com.au/guides/181/nfc-modul
     - `sudo make install`
 - Copy `libnfc.conf` to /etc/nfc/
 - Set jumpers/switches on device, guide [here](https://www.waveshare.com/wiki/PN532_NFC_HAT)
+- **NOTE**: This setup is not currently in use, but is some useful info to keep here still
 
 ### NTAG215 Card
 Datasheet [here](https://www.nxp.com/docs/en/data-sheet/NTAG213_215_216.pdf)
