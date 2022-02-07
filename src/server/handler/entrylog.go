@@ -19,9 +19,18 @@ func writeEntryLog(w http.ResponseWriter, r *http.Request) {
 		render.Render(w, r, ErrBadRequest)
 		return
 	}
-	if err := dbInstance.AddEntryLog(entryLog); err != nil {
-		render.Render(w, r, ErrorRenderer(err))
-		return
+	if entryLog.EntryTime != "" {
+		if err := dbInstance.AddEntryLog(entryLog); err != nil {
+			render.Render(w, r, ErrorRenderer(err))
+			return
+		}
+	} else if entryLog.ExitTime != "" {
+		if err := dbInstance.UpdateEntryLog(entryLog); err != nil {
+			render.Render(w, r, ErrorRenderer(err))
+			return
+		}
+	} else {
+		render.Render(w, r, ErrBadRequest)
 	}
 	if err := render.Render(w, r, entryLog); err != nil {
 		render.Render(w, r, ServerErrorRenderer(err))

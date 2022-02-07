@@ -23,15 +23,14 @@ func (db Database) GetAllEntryLogs() (*models.EntryLogList, error) {
 
 func (db Database) AddEntryLog(entryLog *models.EntryLog) error {
 	var id int
-	query := `INSERT INTO entry_log (user_id, location_id, entry_time, exit_time)
-	VALUES ($1, $2, $3::timestamp, $4::timestamp)
+	query := `INSERT INTO entry_log (user_id, location_id, entry_time)
+	VALUES ($1, $2, $3::timestamp)
 	RETURNING entry_id`
 	err := db.Conn.QueryRow(
 		query,
 		entryLog.UserID,
 		entryLog.LocationID,
 		entryLog.EntryTime,
-		entryLog.ExitTime,
 	).Scan(&id)
 	if err != nil {
 		return err
@@ -44,9 +43,11 @@ func (db Database) UpdateEntryLog(entryLog *models.EntryLog) error {
 	var id int
 	query := `UPDATE entry_log
 	SET exit_time = $2::timestamp
-	WHERE user_id = $1
-	ORDER BY entry_time DESC
-	LIMIT 1
+	WHERE entry_id = (
+		SELECT max(entry_id)
+		FROM entry_log
+		WHERE user_id = $1
+	)
 	RETURNING entry_id`
 	err := db.Conn.QueryRow(
 		query,
