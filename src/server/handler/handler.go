@@ -16,5 +16,6 @@ func NewHandler(db db.Database) http.Handler {
 	router.Route("/users", users)
 	router.Route("/locations", locations)
 	router.Route("/entrylog", entrylog)
+	router.Route("/trace", trace)
 	return router
 }
