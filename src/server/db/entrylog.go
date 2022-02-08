@@ -71,3 +71,8 @@ func (db Database) GetLatestEntryLog(userId int) (*models.EntryLog, error) {
 		return entryLog, nil
 	}
 }
+
+func (db Database) GetContactUsers(userId int) (*models.UserList, error) {
+	users := &models.UserList{}
+	return users, nil
+}
