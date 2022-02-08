@@ -14,6 +14,10 @@ type EntryLog struct {
 	ExitTime   sql.NullString `json:"exit_time"`
 }
 
+type EntryLogList struct {
+	EntryLogs []EntryLog `json:"entry_logs"`
+}
+
 func (u *EntryLog) Bind(r *http.Request) error {
 	if u.EntryID == 0 {
 		return fmt.Errorf("entry_id is a required field")
@@ -28,5 +32,9 @@ func (u *EntryLog) Bind(r *http.Request) error {
 }
 
 func (*EntryLog) Render(w http.ResponseWriter, r *http.Request) error {
+	return nil
+}
+
+func (*EntryLogList) Render(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
