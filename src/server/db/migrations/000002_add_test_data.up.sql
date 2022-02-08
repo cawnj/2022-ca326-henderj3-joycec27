@@ -16,6 +16,21 @@ VALUES
     'John Appleseed',
     '0857890789',
     FALSE
+),
+(
+    'Jane Doe',
+    '0871234123',
+    FALSE
+),
+(
+    'Joao Pereira',
+    '0874567456',
+    FALSE
+),
+(
+    'Aaron Cleary',
+    '0878907789',
+    FALSE
 );
 INSERT INTO locations (name, coords)
 VALUES
@@ -48,8 +63,29 @@ VALUES
     DATE_TRUNC('second', '2022-01-01 16:30:00'::timestamp)
 ),
 -- user 3, entry before, exit after
+(
+    3,
+    3,
+    DATE_TRUNC('second', '2022-01-01 15:00:00'::timestamp),
+    DATE_TRUNC('second', '2022-01-01 17:30:00'::timestamp)    
+
+),
 -- user 4, entry after, exit before
+(
+    4,
+    3,
+    DATE_TRUNC('second', '2022-01-01 16:30:00'::timestamp),
+    DATE_TRUNC('second', '2022-01-01 16:45:00'::timestamp)    
+
+),
 -- user 5, entry after, exit after
+(
+    5,
+    3,
+    DATE_TRUNC('second', '2022-01-01 16:30:00'::timestamp),
+    DATE_TRUNC('second', '2022-01-01 17:30:00'::timestamp)    
+
+),
 -- user 6, unrelated before
 (
     6,
