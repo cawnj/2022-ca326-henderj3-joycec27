@@ -33,21 +33,34 @@ VALUES
 );
 INSERT INTO entry_log (user_id, location_id, entry_time, exit_time)
 VALUES
+-- user 1, covid event
 (
     1,
     3,
-    DATE_TRUNC('second', NOW()::timestamp),
-    DATE_TRUNC('second', (NOW() + interval '1 hour')::timestamp)
+    DATE_TRUNC('second', '2022-01-01 16:00:00'::timestamp),
+    DATE_TRUNC('second', '2022-01-01 17:00:00'::timestamp)
 ),
+-- user 2, entry before, exit before
 (
     2,
-    2,
-    DATE_TRUNC('second', NOW()::timestamp),
-    DATE_TRUNC('second', (NOW() + interval '1 hour')::timestamp)
-),
-(
     3,
-    2,
-    DATE_TRUNC('second', (NOW() - interval '1 hour')::timestamp),
-    DATE_TRUNC('second', (NOW() + interval '30 minutes')::timestamp)
+    DATE_TRUNC('second', '2022-01-01 15:30:00'::timestamp),
+    DATE_TRUNC('second', '2022-01-01 16:30:00'::timestamp)
+),
+-- user 3, entry before, exit after
+-- user 4, entry after, exit before
+-- user 5, entry after, exit after
+-- user 6, unrelated before
+(
+    6,
+    3,
+    DATE_TRUNC('second', '2021-12-31 16:00:00'::timestamp),
+    DATE_TRUNC('second', '2021-12-31 17:00:00'::timestamp)
+),
+-- user 7, unrelated after
+(
+    6,
+    3,
+    DATE_TRUNC('second', '2022-01-02 16:00:00'::timestamp),
+    DATE_TRUNC('second', '2022-01-02 17:00:00'::timestamp)
 );
