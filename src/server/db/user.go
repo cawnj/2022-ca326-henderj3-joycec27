@@ -6,6 +6,24 @@ import (
 	"sonic-server/models"
 )
 
+func (db Database) GetUser(userId int) (*models.User, error) {
+	user := &models.User{}
+	query := `SELECT * FROM users
+	WHERE user_id = $1`
+	err := db.Conn.QueryRow(
+		query,
+		userId,
+	).Scan(&user.ID, &user.Name, &user.PhoneNumber, &user.CovidPositive)
+	switch {
+	case err == sql.ErrNoRows:
+		return nil, nil
+	case err != nil:
+		return nil, err
+	default:
+		return user, nil
+	}
+}
+
 func (db Database) GetAllUsers() (*models.UserList, error) {
 	users := &models.UserList{}
 	rows, err := db.Conn.Query("SELECT * FROM users ORDER BY user_id DESC")
