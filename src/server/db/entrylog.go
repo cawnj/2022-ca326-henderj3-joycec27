@@ -2,7 +2,7 @@ package db
 
 import (
 	"database/sql"
-	"log"
+
 	"sonic-server/models"
 )
 
@@ -73,13 +73,13 @@ func (db Database) GetLatestEntryLog(userId int) (*models.EntryLog, error) {
 	}
 }
 
-func (db Database) GetContactUsers(userId int) (*models.EntryLogList, error) {
-	entryLogs := &models.EntryLogList{}
+func (db Database) GetContactUsers(userId int) (*models.UserList, error) {
+	contactUsers := &models.UserList{}
 	query := `SELECT * FROM entry_log
 	WHERE user_id = $1`
 	contactEvents, err := db.Conn.Query(query, userId)
 	if err != nil {
-		return entryLogs, err
+		return contactUsers, err
 	}
 
 	for contactEvents.Next() {
@@ -92,10 +92,9 @@ func (db Database) GetContactUsers(userId int) (*models.EntryLogList, error) {
 			&contactEvent.ExitTime,
 		)
 		if err != nil {
-			return entryLogs, err
+			return contactUsers, err
 		}
 
-		log.Printf("%+v", contactEvent)
 		query = `SELECT * FROM entry_log
 		WHERE user_id != $1
 		AND location_id = $2
@@ -116,7 +115,7 @@ func (db Database) GetContactUsers(userId int) (*models.EntryLogList, error) {
 			contactEvent.ExitTime.String,
 		)
 		if err != nil {
-			return entryLogs, err
+			return contactUsers, err
 		}
 		for contactUserLogs.Next() {
 			var contactUserLog models.EntryLog
@@ -128,10 +127,14 @@ func (db Database) GetContactUsers(userId int) (*models.EntryLogList, error) {
 				&contactUserLog.ExitTime,
 			)
 			if err != nil {
-				return entryLogs, err
+				return contactUsers, err
 			}
-			entryLogs.EntryLogs = append(entryLogs.EntryLogs, contactUserLog)
+			user, err := db.GetUser(contactUserLog.UserID)
+			if err != nil {
+				return contactUsers, err
+			}
+			contactUsers.Users = append(contactUsers.Users, *user)
 		}
 	}
-	return entryLogs, nil
+	return contactUsers, nil
 }
