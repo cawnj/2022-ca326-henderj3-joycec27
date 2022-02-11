@@ -35,17 +35,18 @@ func (db Database) UpdateEntryLog(entryLog *models.EntryLog) error {
 		WHERE user_id = $1
 	)
 	RETURNING entry_id, entry_time`
-	err := db.Conn.QueryRow(
-		query,
-		entryLog.UserID,
-		entryLog.ExitTime,
-	).Scan(&id, &entryTime)
-	if err != nil {
+	row := db.Conn.QueryRow(query, entryLog.UserID, entryLog.ExitTime)
+	err := row.Scan(&id, &entryTime)
+	switch err {
+	case sql.ErrNoRows:
+		return ErrNoMatch
+	case nil:
+		entryLog.EntryID = id
+		entryLog.EntryTime = entryTime
+		return nil
+	default:
 		return err
 	}
-	entryLog.EntryID = id
-	entryLog.EntryTime = entryTime
-	return nil
 }
 
 func (db Database) GetLatestEntryLog(userId int) (*models.EntryLog, error) {

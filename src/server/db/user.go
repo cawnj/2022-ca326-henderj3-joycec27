@@ -10,17 +10,15 @@ func (db Database) GetUser(userId int) (*models.User, error) {
 	user := &models.User{}
 	query := `SELECT * FROM users
 	WHERE user_id = $1`
-	err := db.Conn.QueryRow(
-		query,
-		userId,
-	).Scan(&user.ID, &user.Name, &user.PhoneNumber, &user.CovidPositive)
-	switch {
-	case err == sql.ErrNoRows:
-		return nil, nil
-	case err != nil:
-		return nil, err
-	default:
+	row := db.Conn.QueryRow(query, userId)
+	err := row.Scan(&user.ID, &user.Name, &user.PhoneNumber, &user.CovidPositive)
+	switch err {
+	case sql.ErrNoRows:
+		return nil, ErrNoMatch
+	case nil:
 		return user, nil
+	default:
+		return nil, err
 	}
 }
 
@@ -46,17 +44,14 @@ func (db Database) UpdateCovidPositive(userId int, value bool) (*models.User, er
 	query := `UPDATE users
 	SET covid_positive = $2
 	WHERE user_id = $1`
-	err := db.Conn.QueryRow(
-		query,
-		userId,
-		value,
-	).Scan(&user.ID, &user.Name, &user.PhoneNumber, &user.CovidPositive)
-	switch {
-	case err == sql.ErrNoRows:
-		return nil, nil
-	case err != nil:
-		return nil, err
-	default:
+	row := db.Conn.QueryRow(query, userId, value)
+	err := row.Scan(&user.ID, &user.Name, &user.PhoneNumber, &user.CovidPositive)
+	switch err {
+	case sql.ErrNoRows:
+		return nil, ErrNoMatch
+	case nil:
 		return user, nil
+	default:
+		return nil, err
 	}
 }
