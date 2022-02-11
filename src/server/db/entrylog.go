@@ -75,7 +75,7 @@ func (db Database) GetLatestEntryLog(userId int) (*models.EntryLog, error) {
 
 func (db Database) GetContactUsers(userId int) (*models.UserList, error) {
 	contactUsers := &models.UserList{}
-	query := `SELECT * FROM entry_log
+	query := `SELECT location_id, entry_time, exit_time FROM entry_log
 	WHERE user_id = $1`
 	contactEvents, err := db.Conn.Query(query, userId)
 	if err != nil {
@@ -83,19 +83,19 @@ func (db Database) GetContactUsers(userId int) (*models.UserList, error) {
 	}
 
 	for contactEvents.Next() {
-		var contactEvent models.EntryLog
+		var locationId int
+		var entryTime string
+		var exitTime string
 		err := contactEvents.Scan(
-			&contactEvent.EntryID,
-			&contactEvent.UserID,
-			&contactEvent.LocationID,
-			&contactEvent.EntryTime,
-			&contactEvent.ExitTime,
+			&locationId,
+			&entryTime,
+			&exitTime,
 		)
 		if err != nil {
 			return contactUsers, err
 		}
 
-		query = `SELECT * FROM entry_log
+		query = `SELECT user_id FROM entry_log
 		WHERE user_id != $1
 		AND location_id = $2
 		AND (
@@ -110,26 +110,22 @@ func (db Database) GetContactUsers(userId int) (*models.UserList, error) {
 		contactUserLogs, err := db.Conn.Query(
 			query,
 			userId,
-			contactEvent.LocationID,
-			contactEvent.EntryTime.String,
-			contactEvent.ExitTime.String,
+			locationId,
+			entryTime,
+			exitTime,
 		)
 		if err != nil {
 			return contactUsers, err
 		}
 		for contactUserLogs.Next() {
-			var contactUserLog models.EntryLog
+			var contactUserId int
 			err := contactUserLogs.Scan(
-				&contactUserLog.EntryID,
-				&contactUserLog.UserID,
-				&contactUserLog.LocationID,
-				&contactUserLog.EntryTime,
-				&contactUserLog.ExitTime,
+				&contactUserId,
 			)
 			if err != nil {
 				return contactUsers, err
 			}
-			user, err := db.GetUser(contactUserLog.UserID)
+			user, err := db.GetUser(contactUserId)
 			if err != nil {
 				return contactUsers, err
 			}
