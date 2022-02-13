@@ -1,17 +1,16 @@
 package models
 
 import (
-	"database/sql"
 	"fmt"
 	"net/http"
 )
 
 type EntryLog struct {
-	EntryID    int            `json:"entry_id"`
-	UserID     int            `json:"user_id"`
-	LocationID int            `json:"location_id"`
-	EntryTime  sql.NullString `json:"entry_time"`
-	ExitTime   sql.NullString `json:"exit_time"`
+	EntryID    int    `json:"entry_id"`
+	UserID     int    `json:"user_id"`
+	LocationID int    `json:"location_id"`
+	EntryTime  string `json:"entry_time"`
+	ExitTime   string `json:"exit_time"`
 }
 
 type EntryLogList struct {

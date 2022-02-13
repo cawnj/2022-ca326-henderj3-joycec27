@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"database/sql"
 	"net/http"
 
 	"sonic-server/models"
@@ -34,17 +33,11 @@ func writeEntryLog(w http.ResponseWriter, r *http.Request) {
 
 	// if this user does not have an entry log OR
 	//   this user's latest entry log includes an exit time
-	if latestEntryLog == nil || latestEntryLog.ExitTime.Valid {
-		entryLog.EntryTime = sql.NullString{
-			String: entryLogReq.Timestamp,
-			Valid:  true,
-		}
+	if latestEntryLog == nil || latestEntryLog.ExitTime != "" {
+		entryLog.EntryTime = entryLogReq.Timestamp
 		createEntryLog(w, r, entryLog)
 	} else {
-		entryLog.ExitTime = sql.NullString{
-			String: entryLogReq.Timestamp,
-			Valid:  true,
-		}
+		entryLog.ExitTime = entryLogReq.Timestamp
 		updateEntryLog(w, r, entryLog)
 	}
 

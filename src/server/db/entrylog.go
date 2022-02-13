@@ -26,7 +26,7 @@ func (db Database) AddEntryLog(entryLog *models.EntryLog) error {
 
 func (db Database) UpdateEntryLog(entryLog *models.EntryLog) error {
 	var id int
-	var entryTime sql.NullString
+	var entryTime string
 	query := `UPDATE entry_log
 	SET exit_time = $2::timestamp
 	WHERE entry_id = (
@@ -50,19 +50,21 @@ func (db Database) UpdateEntryLog(entryLog *models.EntryLog) error {
 }
 
 func (db Database) GetLatestEntryLog(userId int) (*models.EntryLog, error) {
-	entryLog := &models.EntryLog{}
-	query := `SELECT * FROM entry_log
+	var entryId int
+	var locationId int
+	var entryTime string        // will never be null
+	var exitTime sql.NullString // sometimes null
+	query := `SELECT entry_id, location_id, entry_time, exit_time FROM entry_log
 	WHERE entry_id = (
 		SELECT max(entry_id)
 		FROM entry_log
 		WHERE user_id = $1
 	)`
 	err := db.Conn.QueryRow(query, userId).Scan(
-		&entryLog.EntryID,
-		&entryLog.UserID,
-		&entryLog.LocationID,
-		&entryLog.EntryTime,
-		&entryLog.ExitTime,
+		&entryId,
+		&locationId,
+		&entryTime,
+		&exitTime,
 	)
 	switch {
 	case err == sql.ErrNoRows:
@@ -70,6 +72,13 @@ func (db Database) GetLatestEntryLog(userId int) (*models.EntryLog, error) {
 	case err != nil:
 		return nil, err
 	default:
+		entryLog := &models.EntryLog{
+			EntryID:    entryId,
+			UserID:     userId,
+			LocationID: locationId,
+			EntryTime:  entryTime,
+			ExitTime:   exitTime.String,
+		}
 		return entryLog, nil
 	}
 }
@@ -85,8 +94,8 @@ func (db Database) GetContactUsers(userId int) (*models.UserList, error) {
 
 	for contactEvents.Next() {
 		var locationId int
-		var entryTime string
-		var exitTime string
+		var entryTime string        // will never be null
+		var exitTime sql.NullString // sometimes null
 		err := contactEvents.Scan(
 			&locationId,
 			&entryTime,
