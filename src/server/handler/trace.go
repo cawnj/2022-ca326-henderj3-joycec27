@@ -14,17 +14,17 @@ func trace(router chi.Router) {
 }
 
 func contactTrace(w http.ResponseWriter, r *http.Request) {
-	traceReq := &models.TraceRequest{}
-	if err := render.Bind(r, traceReq); err != nil {
+	userReq := &models.UserRequest{}
+	if err := render.Bind(r, userReq); err != nil {
 		render.Render(w, r, ErrBadRequest)
 		return
 	}
-	_, err := dbInstance.UpdateCovidPositive(traceReq.UserID, true)
+	_, err := dbInstance.UpdateCovidPositive(userReq.UserID, true)
 	if err != nil {
 		render.Render(w, r, ErrorRenderer(err))
 		return
 	}
-	users, err := dbInstance.GetContactUsers(traceReq.UserID)
+	users, err := dbInstance.GetContactUsers(userReq.UserID)
 	if err != nil {
 		render.Render(w, r, ErrorRenderer(err))
 		return
