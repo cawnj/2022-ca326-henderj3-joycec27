@@ -8,7 +8,8 @@ from time import sleep, gmtime, strftime
 
 
 LOCATION_ID = 1
-API_ENDPOINT = "https://sonic.cawnj.dev/entrylog"
+USER_ENDPOINT = "https://sonic.cawnj.dev/user"
+ENTRYLOG_ENDPOINT = "https://sonic.cawnj.dev/entrylog"
 
 def find_tag(clf):
     print("\nWaiting for target...")
@@ -33,18 +34,34 @@ def read_tag(tag):
 def get_user_id(tag):
     return int(read_tag(tag))
 
-def send_post_request(user_id):
+def get_user_info(user_id):
+    print("\nGetting user info...")
+    payload = {
+        "user_id": user_id,
+    }
+    print("Request:", payload)
+    response = requests.get(url=USER_ENDPOINT, json=payload)
+    try:
+        print("Response:", response.json())
+    except:
+        endpoint_error(USER_ENDPOINT)
+
+def send_entry_log_request(user_id):
+    print("\nSending entry log request...")
     payload = {
         "user_id": user_id,
         "location_id": LOCATION_ID,
         "timestamp": strftime("%Y-%m-%d %H:%M:%S", gmtime()),
     }
-    print(payload)
-    response = requests.post(url=API_ENDPOINT, json=payload)
+    print("Request:", payload)
+    response = requests.post(url=ENTRYLOG_ENDPOINT, json=payload)
     try:
-        print(response.json())
+        print("Response:", response.json())
     except:
-        print("Something went wrong sending POST request")
+        endpoint_error(ENTRYLOG_ENDPOINT)
+
+def endpoint_error(endpoint):
+    print("Something went wrong sending request to %s", endpoint)
 
 def main():
     with nfc.ContactlessFrontend('tty:S0:pn532') as clf:
@@ -52,7 +69,8 @@ def main():
             tag = find_tag(clf)
             if tag.ndef:
                 user_id = get_user_id(tag)
-                send_post_request(user_id)
+                get_user_info(user_id)
+                send_entry_log_request(user_id)
                 break
 
 if __name__ == "__main__":
