@@ -18,6 +18,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: sonic-server
+    image: sonic-server:latest
     restart: always
     env_file: .env
     ports:
