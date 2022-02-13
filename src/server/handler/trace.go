@@ -19,7 +19,7 @@ func contactTrace(w http.ResponseWriter, r *http.Request) {
 		render.Render(w, r, ErrBadRequest)
 		return
 	}
-	_, err := dbInstance.UpdateCovidPositive(userReq.UserID, true)
+	err := dbInstance.UpdateCovidPositive(userReq.UserID, true)
 	if err != nil {
 		render.Render(w, r, ErrorRenderer(err))
 		return
