@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
 
 	"sonic-server/models"
 )
@@ -40,18 +41,17 @@ func (db Database) GetAllUsers() (*models.UserList, error) {
 }
 
 func (db Database) UpdateCovidPositive(userId int, value bool) (*models.User, error) {
-	user := &models.User{}
 	query := `UPDATE users
 	SET covid_positive = $2
 	WHERE user_id = $1`
-	row := db.Conn.QueryRow(query, userId, value)
-	err := row.Scan(&user.ID, &user.Name, &user.PhoneNumber, &user.CovidPositive)
-	switch err {
-	case sql.ErrNoRows:
-		return nil, ErrNoMatch
-	case nil:
-		return user, nil
-	default:
+	_ = db.Conn.QueryRow(query, userId, value)
+	user, err := db.GetUser(userId)
+	switch {
+	case err != nil:
 		return nil, err
+	case !user.CovidPositive:
+		return nil, fmt.Errorf("could not set covid_positive to true for user id %v", user.ID)
+	default:
+		return user, nil
 	}
 }

@@ -18,6 +18,8 @@ type Database struct {
 	Conn *sql.DB
 }
 
+var ErrNoMatch = fmt.Errorf("no matching record")
+
 func Initialize() (Database, error) {
 	db := Database{}
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
