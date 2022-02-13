@@ -73,7 +73,7 @@ def main():
                 user_id = get_user_id(tag)
                 get_user_info(user_id)
                 send_entry_log_request(user_id)
-                break
+            sleep(2)
 
 if __name__ == "__main__":
     main()
