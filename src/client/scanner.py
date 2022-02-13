@@ -32,7 +32,9 @@ def read_tag(tag):
     return records[0].text
 
 def get_user_id(tag):
-    return int(read_tag(tag))
+    user_id = int(read_tag(tag))
+    print("Found user id:", user_id)
+    return user_id
 
 def get_user_info(user_id):
     print("\nGetting user info...")
