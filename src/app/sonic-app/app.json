@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "sonic-app",
+    "name": "Sonic",
     "slug": "sonic-app",
+    "owner": "cawnj",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -19,7 +20,9 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sonic.sonic",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
