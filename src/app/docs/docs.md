@@ -19,9 +19,17 @@
   - Preferences, Components, select latest iOS simulator
 
 ### Expo Setup
-- `yarn global add expo-cli`
+- `yarn global add expo expo-cli`
 - `export PATH=~/.yarn/bin:$PATH`
 
 ### Create Project - Choose one
 - `npx react-native init sonic-app --template react-native-template-typescript`
 - `expo init sonic-app`
+
+### Expo Build
+- expo build:ios has been superseded by eas build
+- `yarn global add eas-cli`
+- Build docs [here](https://docs.expo.dev/build/setup/)
+- To generate eas.json: `eas build:configure`
+- To build Sonic.app for iOS Simulator: `eas build -p ios --profile simulator`
+- To publish to expo: `expo publish`; Run on device with "Expo Go" app
