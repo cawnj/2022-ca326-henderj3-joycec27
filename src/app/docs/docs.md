@@ -23,5 +23,5 @@
 - `export PATH=~/.yarn/bin:$PATH`
 
 ### Create Project - Choose one
-- `npx react-native init sonic_app --template react-native-template-typescript`
-- `expo init sonic_app`
+- `npx react-native init sonic-app --template react-native-template-typescript`
+- `expo init sonic-app`
