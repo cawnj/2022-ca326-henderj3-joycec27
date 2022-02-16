@@ -33,3 +33,15 @@
 - To generate eas.json: `eas build:configure`
 - To build Sonic.app for iOS Simulator: `eas build -p ios --profile simulator`
 - To publish to expo: `expo publish`; Run on device with "Expo Go" app
+
+### VSCode Extensions
+- React Native Tools
+- React-Native/React/Redux snippets
+- ESLint & Prettier
+
+### ESLint & Prettier Setup
+- `yarn add eslint --dev`
+- `yarn run eslint --init`
+- `yarn add eslint-plugin-react@latest @typescript-eslint/eslint-plugin@latest @typescript-eslint/parser@latest --dev`
+- `yarn add eslint-config-prettier eslint-plugin-prettier prettier --dev`
+- See .vscode/settings.json and .eslintrc.json for config
