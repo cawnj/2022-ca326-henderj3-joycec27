@@ -1,6 +1,12 @@
 import { StyleSheet } from "react-native";
 
-import { TextInput, View, KeyboardAvoidingView } from "../components/Themed";
+import {
+  Text,
+  TextInput,
+  View,
+  KeyboardAvoidingView,
+  TouchableOpacity,
+} from "../components/Themed";
 
 export default function LoginScreen() {
   return (
@@ -19,6 +25,19 @@ export default function LoginScreen() {
           style={styles.input}
           secureTextEntry
         />
+      </View>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={() => {}} style={styles.button}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => { }}
+          style={[styles.button, styles.buttonOutline]}
+        >
+          <Text style={[styles.buttonText, styles.buttonOutlineText]}>
+            Register
+          </Text>
+        </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
@@ -39,6 +58,13 @@ const styles = StyleSheet.create({
     height: 1,
     width: "80%",
   },
-  input: {
+  input: {},
+  button: {
+  },
+  buttonText: {
+  },
+  buttonOutline: {
+  },
+  buttonOutlineText: {
   },
 });

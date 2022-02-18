@@ -8,6 +8,7 @@ import {
   View as DefaultView,
   KeyboardAvoidingView as DefaultKAV,
   TextInput as DefaultTextInput,
+  TouchableOpacity as DefaultTouchableOpacity,
 } from "react-native";
 
 import Colors from "../constants/Colors";
@@ -36,6 +37,8 @@ export type TextProps = ThemeProps & DefaultText["props"];
 export type ViewProps = ThemeProps & DefaultView["props"];
 export type KAVProps = ThemeProps & DefaultKAV["props"];
 export type TextInputProps = ThemeProps & DefaultTextInput["props"];
+export type TouchableOpacityProps = ThemeProps &
+  DefaultTouchableOpacity["props"];
 
 export function Text(props: TextProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
@@ -75,4 +78,19 @@ export function TextInput(props: TextInputProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
 
   return <DefaultTextInput style={[{ color }, style]} {...otherProps} />;
+}
+
+export function TouchableOpacity(props: TouchableOpacityProps) {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  const backgroundColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "background"
+  );
+
+  return (
+    <DefaultTouchableOpacity
+      style={[{ backgroundColor }, style]}
+      {...otherProps}
+    />
+  );
 }
