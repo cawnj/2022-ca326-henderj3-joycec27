@@ -1,12 +1,26 @@
 import { StyleSheet } from "react-native";
 
-import { Text, View } from "../components/Themed";
+import { TextInput, View, KeyboardAvoidingView } from "../components/Themed";
 
 export default function LoginScreen() {
   return (
-    <View style={styles.container}>
-      <Text>Hello from Login Page</Text>
-    </View>
+    <KeyboardAvoidingView style={styles.container}>
+      <View style={styles.container}>
+        <TextInput
+          placeholder="Email"
+          // value={ }
+          // onChangeText={text => ""}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Password"
+          // value={ }
+          // onChangeText={text => ""}
+          style={styles.input}
+          secureTextEntry
+        />
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -24,5 +38,7 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: "80%",
+  },
+  input: {
   },
 });
