@@ -16,12 +16,12 @@ export default function TabOneScreen({
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
-      <EditScreenInfo path="/screens/TabOneScreen.tsx" />
-      <View style={[styles.container, styles.buttonContainer]}>
-        <TouchableOpacity onPress={() => navigation.navigate("Modal")} style={styles.button}>
-          <Text style={styles.buttonText}>I Have Covid</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Help")}
+        style={styles.button}
+      >
+        <Text style={styles.buttonText}>I Have Covid</Text>
+      </TouchableOpacity>
     </View>
   );
 }
