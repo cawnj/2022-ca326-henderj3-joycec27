@@ -18,7 +18,7 @@ export default function TabOneScreen({
       />
       <EditScreenInfo path="/screens/TabOneScreen.tsx" />
       <View style={[styles.container, styles.buttonContainer]}>
-        <TouchableOpacity onPress={() => {}} style={styles.button}>
+        <TouchableOpacity onPress={() => navigation.navigate("Modal")} style={styles.button}>
           <Text style={styles.buttonText}>I Have Covid</Text>
         </TouchableOpacity>
       </View>
