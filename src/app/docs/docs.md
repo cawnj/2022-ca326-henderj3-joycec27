@@ -45,3 +45,9 @@
 - `yarn add eslint-plugin-react@latest @typescript-eslint/eslint-plugin@latest @typescript-eslint/parser@latest --dev`
 - `yarn add eslint-config-prettier eslint-plugin-prettier prettier --dev`
 - See .vscode/settings.json and .eslintrc.json for config
+
+## Expo Notifications
+- login to expo account in terminal using 'expo login'
+- use 'expo start' and scan qr to use application on phone
+- press 'I have covid' in app to view notification token in console
+- using the token use 'https://expo.dev/notifications' to send notifications
