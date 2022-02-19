@@ -1,4 +1,5 @@
-import { StyleSheet } from "react-native";
+import React from "react";
+import { StyleSheet, TouchableOpacity } from "react-native";
 
 import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
@@ -16,6 +17,11 @@ export default function TabOneScreen({
         darkColor="rgba(255,255,255,0.1)"
       />
       <EditScreenInfo path="/screens/TabOneScreen.tsx" />
+      <View style={[styles.container, styles.buttonContainer]}>
+        <TouchableOpacity onPress={() => {}} style={styles.button}>
+          <Text style={styles.buttonText}>I Have Covid</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -34,5 +40,21 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: "80%",
+  },
+  buttonContainer: {
+    width: "60%",
+    marginTop: 40,
+  },
+  button: {
+    backgroundColor: "#FF0000",
+    width: "100%",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "700",
+    fontSize: 16,
   },
 });
