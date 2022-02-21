@@ -2,7 +2,6 @@ import Constants from "expo-constants";
 import React, { useEffect, useRef, useState } from "react";
 import { Platform, StyleSheet, TouchableOpacity } from "react-native";
 import * as Notifications from "expo-notifications";
-import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { auth } from "../firebase";
@@ -51,8 +50,6 @@ export default function TabOneScreen({
           props.navigation.navigate(screen);
         }
       });
-    //getDataUsingGet();
-    getDataUsingPost();
 
     return () => {
       Notifications.removeNotificationSubscription(
@@ -61,49 +58,6 @@ export default function TabOneScreen({
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
-
-  const getDataUsingGet = () => {
-    //GET request
-    fetch("https://sonic.cawnj.dev/users", {
-      method: "GET",
-      //Request Type
-    })
-      .then((response) => response.json())
-      //If response is in json then in success
-      .then((responseJson) => {
-        //Success
-        console.log(responseJson);
-      })
-      //If response is not in json then in error
-      .catch((error) => {
-        //Error
-        console.error(error);
-      });
-  };
-
-  const getDataUsingPost = () => {
-    //POST json
-    fetch("https://sonic.cawnj.dev/trace", {
-      method: "POST", //Request Type
-      body: JSON.stringify({
-        user_id: 1,
-      }),
-      headers: {
-        //Header Defination
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      //If response is in json then in success
-      .then((responseJson) => {
-        console.log(responseJson);
-      })
-      //If response is not in json then in error
-      .catch((error) => {
-        console.error(error);
-      });
-  };
 
   return (
     <View style={styles.container}>
@@ -124,7 +78,7 @@ export default function TabOneScreen({
 }
 
 async function registerForPushNotificationsAsync() {
-  let token;
+  let token: string | undefined;
   if (Constants.isDevice) {
     const { status: existingStatus } =
       await Notifications.getPermissionsAsync();
@@ -140,6 +94,7 @@ async function registerForPushNotificationsAsync() {
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
+    registerWithBackend(token);
   } else {
     alert("Must use physical device for Push Notifications");
   }
@@ -155,6 +110,31 @@ async function registerForPushNotificationsAsync() {
   }
 
   return token;
+}
+
+async function registerWithBackend(token: string) {
+  const firebaseUID = auth.currentUser?.uid;
+  console.log(firebaseUID);
+  console.log(token);
+
+  fetch("https://sonic.cawnj.dev/register", {
+    method: "POST",
+    body: JSON.stringify({
+      user_id: firebaseUID,
+      expo_token: token,
+    }),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
 const styles = StyleSheet.create({
