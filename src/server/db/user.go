@@ -11,7 +11,7 @@ func (db Database) GetUser(userId int) (*models.User, error) {
 	query := `SELECT * FROM users
 	WHERE user_id = $1`
 	row := db.Conn.QueryRow(query, userId)
-	err := row.Scan(&user.ID, &user.Name, &user.PhoneNumber, &user.CovidPositive)
+	err := row.Scan(&user.UserID, &user.ExpoToken)
 	switch err {
 	case sql.ErrNoRows:
 		return nil, ErrNoMatch
@@ -30,7 +30,7 @@ func (db Database) GetAllUsers() (*models.UserList, error) {
 	}
 	for rows.Next() {
 		var user models.User
-		err := rows.Scan(&user.ID, &user.Name, &user.PhoneNumber, &user.CovidPositive)
+		err := rows.Scan(&user.UserID, &user.ExpoToken)
 		if err != nil {
 			return users, err
 		}
@@ -39,6 +39,6 @@ func (db Database) GetAllUsers() (*models.UserList, error) {
 	return users, nil
 }
 
-func (db Database) RegisterUser(registerReq *models.RegisterRequest) error {
+func (db Database) RegisterUser(registerReq *models.User) error {
 	return nil
 }

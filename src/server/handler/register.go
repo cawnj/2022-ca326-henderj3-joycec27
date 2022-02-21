@@ -15,18 +15,18 @@ func register(router chi.Router) {
 }
 
 func registerUser(w http.ResponseWriter, r *http.Request) {
-	registerReq := &models.RegisterRequest{}
-	if err := render.Bind(r, registerReq); err != nil {
+	user := &models.User{}
+	if err := render.Bind(r, user); err != nil {
 		render.Render(w, r, ErrBadRequest)
 		return
 	}
-	if err := dbInstance.RegisterUser(registerReq); err != nil {
+	if err := dbInstance.RegisterUser(user); err != nil {
 		render.Render(w, r, ServerErrorRenderer(err))
 		return
 	}
 	response := &models.RegisterResponse{
 		StatusCode: 201,
-		StatusText: fmt.Sprintf("user '%s' registered successfuly", registerReq.UserID),
+		StatusText: fmt.Sprintf("user '%s' registered successfuly", user.UserID),
 	}
 	if err := render.Render(w, r, response); err != nil {
 		render.Render(w, r, ServerErrorRenderer(err))
