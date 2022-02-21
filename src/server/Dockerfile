@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # minimal golang image for building
-FROM golang:1.16-alpine as build
+FROM golang:1.17-alpine as build
 WORKDIR /go/src/sonic-server
 
 # copy src and install dependencies
