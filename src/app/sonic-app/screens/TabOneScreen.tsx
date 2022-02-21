@@ -51,7 +51,8 @@ export default function TabOneScreen({
           props.navigation.navigate(screen);
         }
       });
-
+    //getDataUsingGet();
+    getDataUsingPost();
 
     return () => {
       Notifications.removeNotificationSubscription(
@@ -61,8 +62,48 @@ export default function TabOneScreen({
     };
   }, []);
 
-  console.log("uid: ", auth.currentUser?.uid);
-  console.log(expoPushToken);
+  const getDataUsingGet = () => {
+    //GET request
+    fetch("https://sonic.cawnj.dev/users", {
+      method: "GET",
+      //Request Type
+    })
+      .then((response) => response.json())
+      //If response is in json then in success
+      .then((responseJson) => {
+        //Success
+        console.log(responseJson);
+      })
+      //If response is not in json then in error
+      .catch((error) => {
+        //Error
+        console.error(error);
+      });
+  };
+
+  const getDataUsingPost = () => {
+    //POST json
+    fetch("https://sonic.cawnj.dev/trace", {
+      method: "POST", //Request Type
+      body: JSON.stringify({
+        user_id: 1,
+      }),
+      headers: {
+        //Header Defination
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      //If response is in json then in success
+      .then((responseJson) => {
+        console.log(responseJson);
+      })
+      //If response is not in json then in error
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <View style={styles.container}>
