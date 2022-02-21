@@ -39,14 +39,6 @@ func (db Database) GetAllUsers() (*models.UserList, error) {
 	return users, nil
 }
 
-func (db Database) UpdateCovidPositive(userId int, value bool) error {
-	query := `UPDATE users
-	SET covid_positive = $2
-	WHERE user_id = $1`
-	_, err := db.Conn.Exec(query, userId, value)
-	return err
-}
-
 func (db Database) RegisterUser(registerReq *models.RegisterRequest) error {
 	return nil
 }

@@ -19,11 +19,6 @@ func contactTrace(w http.ResponseWriter, r *http.Request) {
 		render.Render(w, r, ErrBadRequest)
 		return
 	}
-	err := dbInstance.UpdateCovidPositive(userReq.UserID, true)
-	if err != nil {
-		render.Render(w, r, ErrorRenderer(err))
-		return
-	}
 	users, err := dbInstance.GetContactUsers(userReq.UserID)
 	if err != nil {
 		render.Render(w, r, ErrorRenderer(err))
