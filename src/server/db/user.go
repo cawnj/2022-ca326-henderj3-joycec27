@@ -6,7 +6,7 @@ import (
 	"sonic-server/models"
 )
 
-func (db Database) GetUser(userId int) (*models.User, error) {
+func (db Database) GetUser(userId string) (*models.User, error) {
 	user := &models.User{}
 	query := `SELECT * FROM users
 	WHERE user_id = $1`
@@ -39,6 +39,6 @@ func (db Database) GetAllUsers() (*models.UserList, error) {
 	return users, nil
 }
 
-func (db Database) RegisterUser(registerReq *models.User) error {
+func (db Database) RegisterUser(user *models.User) error {
 	return nil
 }

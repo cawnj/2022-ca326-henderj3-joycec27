@@ -6,13 +6,13 @@ import (
 )
 
 type EntryLogRequest struct {
-	UserID     int    `json:"user_id"`
+	UserID     string `json:"user_id"`
 	LocationID int    `json:"location_id"`
 	Timestamp  string `json:"timestamp"`
 }
 
 func (u *EntryLogRequest) Bind(r *http.Request) error {
-	if u.UserID == 0 {
+	if u.UserID == "" {
 		return fmt.Errorf("user_id is a required field")
 	}
 	if u.LocationID == 0 {

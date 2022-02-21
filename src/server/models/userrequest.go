@@ -6,11 +6,11 @@ import (
 )
 
 type UserRequest struct {
-	UserID int `json:"user_id"`
+	UserID string `json:"user_id"`
 }
 
-func (t *UserRequest) Bind(r *http.Request) error {
-	if t.UserID == 0 {
+func (u *UserRequest) Bind(r *http.Request) error {
+	if u.UserID == "" {
 		return fmt.Errorf("user_id is a required field")
 	}
 	return nil

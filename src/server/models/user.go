@@ -10,6 +10,10 @@ type User struct {
 	ExpoToken string `json:"expo_token"`
 }
 
+type UserList struct {
+	Users []User `json:"users"`
+}
+
 func (u *User) Bind(r *http.Request) error {
 	if u.UserID == "" {
 		return fmt.Errorf("user_id is a required field")
@@ -22,10 +26,6 @@ func (u *User) Bind(r *http.Request) error {
 
 func (*User) Render(w http.ResponseWriter, r *http.Request) error {
 	return nil
-}
-
-type UserList struct {
-	Users []User `json:"users"`
 }
 
 func (*UserList) Render(w http.ResponseWriter, r *http.Request) error {

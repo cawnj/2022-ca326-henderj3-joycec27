@@ -49,7 +49,7 @@ func (db Database) UpdateEntryLog(entryLog *models.EntryLog) error {
 	}
 }
 
-func (db Database) GetLatestEntryLog(userId int) (*models.EntryLog, error) {
+func (db Database) GetLatestEntryLog(userId string) (*models.EntryLog, error) {
 	var entryId int
 	var locationId int
 	var entryTime string        // will never be null
@@ -83,7 +83,7 @@ func (db Database) GetLatestEntryLog(userId int) (*models.EntryLog, error) {
 	}
 }
 
-func (db Database) GetContactUsers(userId int) (*models.UserList, error) {
+func (db Database) GetContactUsers(userId string) (*models.UserList, error) {
 	contactUsers := &models.UserList{}
 	query := `SELECT location_id, entry_time, exit_time FROM entry_log
 	WHERE user_id = $1`
@@ -128,7 +128,7 @@ func (db Database) GetContactUsers(userId int) (*models.UserList, error) {
 			return contactUsers, err
 		}
 		for contactUserLogs.Next() {
-			var contactUserId int
+			var contactUserId string
 			err := contactUserLogs.Scan(
 				&contactUserId,
 			)

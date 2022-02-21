@@ -7,7 +7,7 @@ import (
 
 type EntryLog struct {
 	EntryID    int    `json:"entry_id"`
-	UserID     int    `json:"user_id"`
+	UserID     string `json:"user_id"`
 	LocationID int    `json:"location_id"`
 	EntryTime  string `json:"entry_time"`
 	ExitTime   string `json:"exit_time"`
@@ -21,7 +21,7 @@ func (u *EntryLog) Bind(r *http.Request) error {
 	if u.EntryID == 0 {
 		return fmt.Errorf("entry_id is a required field")
 	}
-	if u.UserID == 0 {
+	if u.UserID == "" {
 		return fmt.Errorf("user_id is a required field")
 	}
 	if u.LocationID == 0 {
