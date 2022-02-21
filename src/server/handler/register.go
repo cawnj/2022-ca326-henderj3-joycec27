@@ -11,7 +11,7 @@ import (
 )
 
 func register(router chi.Router) {
-	router.Get("/", registerUser)
+	router.Post("/", registerUser)
 }
 
 func registerUser(w http.ResponseWriter, r *http.Request) {
