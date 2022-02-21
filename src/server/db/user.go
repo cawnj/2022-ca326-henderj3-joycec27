@@ -46,3 +46,7 @@ func (db Database) UpdateCovidPositive(userId int, value bool) error {
 	_, err := db.Conn.Exec(query, userId, value)
 	return err
 }
+
+func (db Database) RegisterUser(registerReq *models.RegisterRequest) error {
+	return nil
+}
