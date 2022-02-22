@@ -42,7 +42,7 @@ export default function LoginScreen() {
       .signInWithEmailAndPassword(email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        console.log("Logged in with: ", user?.email);;
+        console.log("Logged in with: ", user?.email);
       })
       .catch((error) => alert(error.message));
   };
@@ -75,6 +75,12 @@ export default function LoginScreen() {
           <Text style={[styles.buttonText, styles.buttonOutlineText]}>
             Register
           </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Forgot")}
+          style={styles.Fbutton}
+        >
+          <Text style={styles.FbuttonText}>Forgot Password</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -119,6 +125,17 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "white",
+    fontWeight: "700",
+    fontSize: 16,
+  },
+  Fbutton: {
+    width: "100%",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  FbuttonText: {
+    color: "#0782F9",
     fontWeight: "700",
     fontSize: 16,
   },
