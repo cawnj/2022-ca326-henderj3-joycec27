@@ -152,16 +152,13 @@ const styles = StyleSheet.create({
     height: 1,
     width: "80%",
   },
-  buttonContainer: {
-    width: "60%",
-    marginTop: 40,
-  },
   button: {
     backgroundColor: "#FF0000",
-    width: "100%",
+    width: "60%",
     padding: 15,
     borderRadius: 10,
     alignItems: "center",
+    marginTop: 40,
   },
   buttonText: {
     color: "white",

@@ -76,10 +76,11 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#26DFD0",
-    width: "100%",
+    width: "60%",
     padding: 15,
     borderRadius: 10,
     alignItems: "center",
+    marginTop: 40,
   },
   buttonText: {
     color: "white",
