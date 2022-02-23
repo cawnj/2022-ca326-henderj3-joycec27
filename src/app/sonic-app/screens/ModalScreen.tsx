@@ -1,13 +1,35 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useRef, useState } from "react";
 import { Platform, StyleSheet, TouchableOpacity } from "react-native";
 
-import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
-import Constants from "expo-constants";
-
+import { auth } from "../firebase";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ModalScreen() {
+  const navigation = useNavigation();
+
+  const sendPostRequest = () => {
+    const firebaseUID = auth.currentUser?.uid;
+    fetch("https://sonic.cawnj.dev/trace", {
+      method: "POST",
+      body: JSON.stringify({
+        user_id: firebaseUID,
+      }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    navigation.navigate("Root");
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Help</Text>
@@ -22,10 +44,9 @@ export default function ModalScreen() {
         lightColor="rgba(0,0,0,0.8)"
         darkColor="rgba(255,255,255,0.8)"
       >
-        If you have Covid please press continue otherwise swipe down to return
-        to home screen:
+        If you have Covid please press
       </Text>
-      <TouchableOpacity onPress={() => {}} style={styles.button}>
+      <TouchableOpacity onPress={sendPostRequest} style={styles.button}>
         <Text style={styles.buttonText}>Continue</Text>
       </TouchableOpacity>
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
