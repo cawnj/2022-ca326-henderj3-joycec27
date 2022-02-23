@@ -17,15 +17,6 @@ export default function TabTwoScreen() {
       .catch((error) => alert(error.message));
   };
 
-  const handleProfileAuth = () => {
-    auth
-      .signOut()
-      .then(() => {
-        navigation.replace("Reset");
-      })
-      .catch((error) => alert(error.message));
-  };
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Profile</Text>
@@ -35,9 +26,6 @@ export default function TabTwoScreen() {
         darkColor="rgba(255,255,255,0.1)"
       />
       <Text>Email: {auth.currentUser?.email}</Text>
-      <TouchableOpacity onPress={handleProfileAuth} style={styles.Ebutton}>
-        <Text style={styles.EbuttonText}>Edit Profile</Text>
-      </TouchableOpacity>
       <TouchableOpacity onPress={handleSignOut} style={styles.button}>
         <Text style={styles.buttonText}>Sign out</Text>
       </TouchableOpacity>
@@ -59,17 +47,6 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: "80%",
-  },
-  Ebutton: {
-    width: "100%",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  EbuttonText: {
-    color: "#0782F9",
-    fontWeight: "700",
-    fontSize: 16,
   },
   button: {
     backgroundColor: "#0782F9",

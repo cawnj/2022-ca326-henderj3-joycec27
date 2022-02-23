@@ -16,12 +16,10 @@ import { ColorSchemeName, Pressable } from "react-native";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
-import EditProfileScreen from "../screens/EditProfileScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 import LoginScreen from "../screens/LoginScreen";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
-import ResetScreen from "../screens/ResetScreen";
 import TabOneScreen from "../screens/TabOneScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
 import {
@@ -66,16 +64,6 @@ function RootNavigator() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Reset"
-        component={ResetScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Tab2"
-        component={TabTwoScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
         name="Root"
         component={BottomTabNavigator}
         options={{ headerShown: false }}
@@ -87,7 +75,6 @@ function RootNavigator() {
       />
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name="Help" component={ModalScreen} />
-        <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );
