@@ -21,6 +21,7 @@ import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 import LoginScreen from "../screens/LoginScreen";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
+import ResetScreen from "../screens/ResetScreen";
 import TabOneScreen from "../screens/TabOneScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
 import {
@@ -62,6 +63,11 @@ function RootNavigator() {
       <Stack.Screen
         name="Forgot"
         component={ForgotPasswordScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Reset"
+        component={ResetScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen

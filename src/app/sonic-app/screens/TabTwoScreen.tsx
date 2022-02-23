@@ -17,6 +17,15 @@ export default function TabTwoScreen() {
       .catch((error) => alert(error.message));
   };
 
+  const handleProfileAuth = () => {
+    auth
+      .signOut()
+      .then(() => {
+        navigation.replace("Reset");
+      })
+      .catch((error) => alert(error.message));
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Profile</Text>
@@ -26,10 +35,7 @@ export default function TabTwoScreen() {
         darkColor="rgba(255,255,255,0.1)"
       />
       <Text>Email: {auth.currentUser?.email}</Text>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("Edit Profile")}
-        style={styles.Ebutton}
-      >
+      <TouchableOpacity onPress={handleProfileAuth} style={styles.Ebutton}>
         <Text style={styles.EbuttonText}>Edit Profile</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={handleSignOut} style={styles.button}>
