@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
+	expo "github.com/oliveroneill/exponent-server-sdk-golang/sdk"
 )
 
 func trace(router chi.Router) {
@@ -38,5 +39,31 @@ func contactTrace(w http.ResponseWriter, r *http.Request) {
 }
 
 func notifyCloseContacts(users *models.UserList) error {
-	return nil
+	tokens := []expo.ExponentPushToken{}
+	for _, user := range users.Users {
+		pushToken, err := expo.NewExponentPushToken(user.ExpoToken)
+		if err != nil {
+			return err
+		}
+		tokens = append(tokens, pushToken)
+	}
+
+	client := expo.NewPushClient(nil)
+	response, err := client.Publish(
+		&expo.PushMessage{
+			To:       tokens,
+			Body:     "You are a close contact!",
+			Sound:    "default",
+			Title:    "Sonic",
+			Priority: expo.DefaultPriority,
+		},
+	)
+	if err != nil {
+		return err
+	}
+	if response.ValidateResponse() != nil {
+		return fmt.Errorf("%s failed", response.PushMessage.To)
+	}
+
+	return err
 }
