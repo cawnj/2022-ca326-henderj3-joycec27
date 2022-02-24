@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	"sonic-server/models"
@@ -24,7 +25,18 @@ func contactTrace(w http.ResponseWriter, r *http.Request) {
 		render.Render(w, r, ErrorRenderer(err))
 		return
 	}
-	if err := render.Render(w, r, users); err != nil {
+	if err := notifyCloseContacts(users); err != nil {
 		render.Render(w, r, ErrorRenderer(err))
 	}
+	response := &models.PostResponse{
+		StatusCode: 201,
+		StatusText: fmt.Sprintf("notified '%d' close contacts", len(users.Users)),
+	}
+	if err := render.Render(w, r, response); err != nil {
+		render.Render(w, r, ErrorRenderer(err))
+	}
+}
+
+func notifyCloseContacts(users *models.UserList) error {
+	return nil
 }
