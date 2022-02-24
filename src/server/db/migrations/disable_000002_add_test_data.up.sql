@@ -32,20 +32,7 @@ VALUES
     '0878907789',
     FALSE
 );
-INSERT INTO locations (name, coords)
-VALUES
-(
-    'The Spire',
-    ST_SetSRID(ST_MakePoint(53.349813, -6.260254), 4326)
-),
-(
-    'DCU Nubar',
-    ST_SetSRID(ST_MakePoint(53.385006, -6.258963), 4326)
-),
-(
-    'The Academy',
-    ST_SetSRID(ST_MakePoint(53.348001, -6.261989), 4326)
-);
+
 INSERT INTO entry_log (user_id, location_id, entry_time, exit_time)
 VALUES
 -- user 1, covid event
