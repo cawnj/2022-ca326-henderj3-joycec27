@@ -30,7 +30,7 @@ func contactTrace(w http.ResponseWriter, r *http.Request) {
 	}
 	response := &models.PostResponse{
 		StatusCode: 201,
-		StatusText: fmt.Sprintf("notified '%d' close contacts", len(users.Users)),
+		StatusText: fmt.Sprintf("notified %d close contacts", len(users.Users)),
 	}
 	if err := render.Render(w, r, response); err != nil {
 		render.Render(w, r, ErrorRenderer(err))
