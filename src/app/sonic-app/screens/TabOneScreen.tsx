@@ -95,6 +95,7 @@ async function registerForPushNotificationsAsync() {
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
     registerWithBackend(token);
+    Latest();
   } else {
     alert("Must use physical device for Push Notifications");
   }
@@ -122,6 +123,27 @@ async function registerWithBackend(token: string) {
     body: JSON.stringify({
       user_id: firebaseUID,
       expo_token: token,
+    }),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+async function Latest() {
+  const firebaseUID = auth.currentUser?.uid;
+  fetch("https://sonic.cawnj.dev/latestlocation", {
+    method: "POST",
+    body: JSON.stringify({
+      user_id: firebaseUID,
     }),
     headers: {
       Accept: "application/json",

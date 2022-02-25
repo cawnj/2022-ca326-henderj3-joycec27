@@ -11,7 +11,7 @@ import (
 )
 
 func latestLocation(router chi.Router) {
-	router.Get("/", getLatestLocation)
+	router.Post("/", getLatestLocation)
 }
 
 func getLatestLocation(w http.ResponseWriter, r *http.Request) {
