@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { auth } from "../firebase";
 
@@ -49,6 +49,10 @@ export default function LoginScreen() {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
+      <Image
+        source={require("../assets/images/sonic-gradient.png")}
+        style={styles.logoImage}
+      />
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Email"
@@ -104,7 +108,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: "80%",
-    marginTop: 100,
+    marginTop: 35,
   },
   input: {
     paddingHorizontal: 15,
@@ -149,5 +153,11 @@ const styles = StyleSheet.create({
     color: "#0782F9",
     fontWeight: "700",
     fontSize: 16,
+  },
+  logoImage: {
+    resizeMode: "contain",
+    width: "60%",
+    height: "10%",
+    marginTop: 100,
   },
 });
