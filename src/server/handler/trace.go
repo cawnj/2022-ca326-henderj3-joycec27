@@ -39,6 +39,9 @@ func contactTrace(w http.ResponseWriter, r *http.Request) {
 }
 
 func notifyCloseContacts(users *models.UserList) error {
+	if users.Users == nil {
+		return nil
+	}
 	tokens := []expo.ExponentPushToken{}
 	for _, user := range users.Users {
 		pushToken, err := expo.NewExponentPushToken(user.ExpoToken)
