@@ -1,6 +1,8 @@
 package db
 
 import (
+	"time"
+
 	"database/sql"
 
 	"sonic-server/models"
@@ -84,10 +86,12 @@ func (db Database) GetLatestEntryLog(userId string) (*models.EntryLog, error) {
 }
 
 func (db Database) GetContactUsers(userId string) (*models.UserList, error) {
+	dt := time.Now().AddDate(0, 0, -3).Format("2006-01-02 15:04:05")
 	contactUsers := &models.UserList{}
 	query := `SELECT location_id, entry_time, exit_time FROM entry_log
-	WHERE user_id = $1`
-	contactEvents, err := db.Conn.Query(query, userId)
+	WHERE user_id = $1
+	AND entry_time >= $2`
+	contactEvents, err := db.Conn.Query(query, userId, dt)
 	if err != nil {
 		return contactUsers, err
 	}
