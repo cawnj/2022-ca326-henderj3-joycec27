@@ -2,14 +2,18 @@
 
 import nfc
 import ndef
+import os
 import requests
 from nfc.clf import RemoteTarget
 from time import sleep, gmtime, strftime
 
-
-LOCATION_ID = 1
 USER_ENDPOINT = "https://sonic.cawnj.dev/user"
 ENTRYLOG_ENDPOINT = "https://sonic.cawnj.dev/entrylog"
+
+LOCATION_ID = os.getenv("LOCATION_ID")
+if not LOCATION_ID:
+    print("Please pass LOCATION_ID enviornment variable")
+    exit(1)
 
 def find_tag(clf):
     print("\nWaiting for target...")
@@ -52,7 +56,7 @@ def send_entry_log_request(user_id):
     print("\nSending entry log request...")
     payload = {
         "user_id": user_id,
-        "location_id": LOCATION_ID,
+        "location_id": int(LOCATION_ID),
         "timestamp": strftime("%Y-%m-%d %H:%M:%S", gmtime()),
     }
     print("Request:", payload)
