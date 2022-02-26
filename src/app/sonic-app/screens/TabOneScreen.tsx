@@ -19,8 +19,28 @@ export default function TabOneScreen({
 }: RootTabScreenProps<"TabOne">) {
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
+  const [locationData, setLocationData] = useState({
+    name: "",
+    timestamp: "",
+  });
   const notificationListener = useRef();
   const responseListener = useRef();
+
+  const fetchLocationData = async () => {
+    const firebaseUID = auth.currentUser?.uid;
+    const resp = await fetch("https://sonic.cawnj.dev/latestlocation", {
+      method: "POST",
+      body: JSON.stringify({
+        user_id: firebaseUID,
+      }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await resp.json();
+    setLocationData(data);
+  };
 
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>
@@ -51,6 +71,7 @@ export default function TabOneScreen({
         }
       });
 
+    fetchLocationData();
     return () => {
       Notifications.removeNotificationSubscription(
         notificationListener.current
@@ -62,6 +83,18 @@ export default function TabOneScreen({
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Home</Text>
+      <View
+        style={styles.separator}
+        lightColor="#eee"
+        darkColor="rgba(255,255,255,0.1)"
+      />
+      <Text style={styles.content}>
+        Your latest visit:
+        {"\n\t"}
+        Location: {locationData.name}
+        {"\n\t"}
+        When: {locationData.timestamp}
+      </Text>
       <View
         style={styles.separator}
         lightColor="#eee"
@@ -95,7 +128,6 @@ async function registerForPushNotificationsAsync() {
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
     registerWithBackend(token);
-    Latest();
   } else {
     alert("Must use physical device for Push Notifications");
   }
@@ -138,27 +170,6 @@ async function registerWithBackend(token: string) {
     });
 }
 
-async function Latest() {
-  const firebaseUID = auth.currentUser?.uid;
-  fetch("https://sonic.cawnj.dev/latestlocation", {
-    method: "POST",
-    body: JSON.stringify({
-      user_id: firebaseUID,
-    }),
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      console.log(responseJson);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -167,6 +178,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
+    fontWeight: "bold",
+  },
+  content: {
+    fontSize: 12,
     fontWeight: "bold",
   },
   separator: {
