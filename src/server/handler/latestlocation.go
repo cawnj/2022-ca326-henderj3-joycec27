@@ -39,18 +39,24 @@ func getLatestLocation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// get the location data
-	latestLocation, err := dbInstance.GetLocation(latestEntryLog.LocationID)
-	if err != nil {
-		render.Render(w, r, ErrorRenderer(err))
-		return
+	// init response with nil values
+	locationNameAndTimestamp := &models.LocationNameAndTimestamp{
+		Name:      "",
+		Timestamp: "",
+	}
+	// only try to fill values if an entry log exists
+	if latestEntryLog != nil {
+		// get the location data
+		latestLocation, err := dbInstance.GetLocation(latestEntryLog.LocationID)
+		if err != nil {
+			render.Render(w, r, ErrorRenderer(err))
+			return
+		}
+		// set response values
+		locationNameAndTimestamp.Name = latestLocation.Name
+		locationNameAndTimestamp.Timestamp = latestEntryLog.EntryTime
 	}
 
-	// build response object
-	locationNameAndTimestamp := &models.LocationNameAndTimestamp{
-		Name:      latestLocation.Name,
-		Timestamp: latestEntryLog.EntryTime,
-	}
 	if err := render.Render(w, r, locationNameAndTimestamp); err != nil {
 		render.Render(w, r, ServerErrorRenderer(err))
 		return
