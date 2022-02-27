@@ -5,6 +5,7 @@ import * as Notifications from "expo-notifications";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { auth } from "../firebase";
+import { Card } from "react-native-elements";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -19,10 +20,9 @@ export default function TabOneScreen({
 }: RootTabScreenProps<"TabOne">) {
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
-  const [locationData, setLocationData] = useState({
-    name: "",
-    timestamp: "",
-  });
+  const [locationName, setLocationName] = useState("");
+  const [prettyDate, setPrettyDate] = useState("");
+  const [prettyTime, setPrettyTime] = useState("");
   const notificationListener = useRef();
   const responseListener = useRef();
 
@@ -39,7 +39,9 @@ export default function TabOneScreen({
       },
     });
     const data = await resp.json();
-    setLocationData(data);
+    setLocationName(data.name);
+    setPrettyDate(data.timestamp.split("T")[0]);
+    setPrettyTime(data.timestamp.split("T")[1]);
   };
 
   useEffect(() => {
@@ -88,13 +90,17 @@ export default function TabOneScreen({
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
-      <Text style={styles.content}>
-        Your latest visit:
-        {"\n\t"}
-        Location: {locationData.name}
-        {"\n\t"}
-        When: {locationData.timestamp}
-      </Text>
+      <Card>
+        <Card.Title>
+          <Text style={styles.cardTitle}>Your Latest Visit</Text>
+        </Card.Title>
+        <Card.Divider />
+        <Text style={styles.content}>
+          You Visited {locationName} on{" "}
+          {prettyDate.split("-").reverse().join("-")} at{" "}
+          {prettyTime.substring(0, 5)}
+        </Text>
+      </Card>
       <View
         style={styles.separator}
         lightColor="#eee"
@@ -182,6 +188,10 @@ const styles = StyleSheet.create({
   },
   content: {
     fontSize: 12,
+    fontWeight: "bold",
+  },
+  cardTitle: {
+    fontSize: 20,
     fontWeight: "bold",
   },
   separator: {
