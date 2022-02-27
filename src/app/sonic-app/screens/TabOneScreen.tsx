@@ -41,8 +41,8 @@ export default function TabOneScreen({
     });
     const data = await resp.json();
     setLocationName(data.name);
-    setPrettyDate(data.timestamp.split("T")[0]);
-    setPrettyTime(data.timestamp.split("T")[1]);
+    setPrettyDate(data.timestamp.split("T")[0].split("-").reverse().join("-"));
+    setPrettyTime(data.timestamp.split("T")[1].substring(0, 5));
   };
 
   useEffect(() => {
@@ -98,9 +98,7 @@ export default function TabOneScreen({
           </Card.Title>
           <Card.Divider />
           <Text style={styles.content}>
-            You Visited {locationName} on{" "}
-            {prettyDate.split("-").reverse().join("-")} at{" "}
-            {prettyTime.substring(0, 5)}
+            You Visited {locationName} on {prettyDate} at {prettyTime}
           </Text>
         </Card>
       </ThemeProvider>
