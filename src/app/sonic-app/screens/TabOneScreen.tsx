@@ -49,7 +49,7 @@ export default function TabOneScreen({
         .reverse()
         .join("-");
       const prettyTime = data.timestamp.split("T")[1].substring(0, 5);
-      locationData = `You Visited ${locationName} on ${prettyDate} at ${prettyTime}`;
+      locationData = `You visited ${locationName} on ${prettyDate} at ${prettyTime}`;
     } else {
       // else set it to this
       locationData = "You have not visited anywhere yet!";
@@ -112,11 +112,6 @@ export default function TabOneScreen({
           <Text style={styles.content}>{locationDataString}</Text>
         </Card>
       </ThemeProvider>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
       <TouchableOpacity
         onPress={() => navigation.navigate("Help")}
         style={styles.button}
