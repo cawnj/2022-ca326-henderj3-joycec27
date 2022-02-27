@@ -21,9 +21,7 @@ export default function TabOneScreen({
 }: RootTabScreenProps<"TabOne">) {
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
-  const [locationName, setLocationName] = useState("");
-  const [prettyDate, setPrettyDate] = useState("");
-  const [prettyTime, setPrettyTime] = useState("");
+  const [locationDataString, setLocationDataString] = useState("");
   const notificationListener = useRef();
   const responseListener = useRef();
 
@@ -40,9 +38,23 @@ export default function TabOneScreen({
       },
     });
     const data = await resp.json();
-    setLocationName(data.name);
-    setPrettyDate(data.timestamp.split("T")[0].split("-").reverse().join("-"));
-    setPrettyTime(data.timestamp.split("T")[1].substring(0, 5));
+
+    let locationData: string;
+    // set locationDataString if a latest location exists
+    if (data.name) {
+      const locationName = data.name;
+      const prettyDate = data.timestamp
+        .split("T")[0]
+        .split("-")
+        .reverse()
+        .join("-");
+      const prettyTime = data.timestamp.split("T")[1].substring(0, 5);
+      locationData = `You Visited ${locationName} on ${prettyDate} at ${prettyTime}`;
+    } else {
+      // else set it to this
+      locationData = "You have not visited anywhere yet!";
+    }
+    setLocationDataString(locationData);
   };
 
   useEffect(() => {
@@ -97,9 +109,7 @@ export default function TabOneScreen({
             <Text style={styles.cardTitle}>Your Latest Visit</Text>
           </Card.Title>
           <Card.Divider />
-          <Text style={styles.content}>
-            You Visited {locationName} on {prettyDate} at {prettyTime}
-          </Text>
+          <Text style={styles.content}>{locationDataString}</Text>
         </Card>
       </ThemeProvider>
       <View
