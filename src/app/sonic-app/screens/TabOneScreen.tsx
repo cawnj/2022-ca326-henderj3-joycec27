@@ -5,7 +5,8 @@ import * as Notifications from "expo-notifications";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { auth } from "../firebase";
-import { Card } from "react-native-elements";
+import { Card, ThemeProvider } from "react-native-elements";
+import useColorScheme from "../hooks/useColorScheme";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -90,17 +91,19 @@ export default function TabOneScreen({
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
-      <Card>
-        <Card.Title>
-          <Text style={styles.cardTitle}>Your Latest Visit</Text>
-        </Card.Title>
-        <Card.Divider />
-        <Text style={styles.content}>
-          You Visited {locationName} on{" "}
-          {prettyDate.split("-").reverse().join("-")} at{" "}
-          {prettyTime.substring(0, 5)}
-        </Text>
-      </Card>
+      <ThemeProvider useDark={useColorScheme() === "dark"}>
+        <Card>
+          <Card.Title>
+            <Text style={styles.cardTitle}>Your Latest Visit</Text>
+          </Card.Title>
+          <Card.Divider />
+          <Text style={styles.content}>
+            You Visited {locationName} on{" "}
+            {prettyDate.split("-").reverse().join("-")} at{" "}
+            {prettyTime.substring(0, 5)}
+          </Text>
+        </Card>
+      </ThemeProvider>
       <View
         style={styles.separator}
         lightColor="#eee"
