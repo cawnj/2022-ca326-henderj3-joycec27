@@ -4,17 +4,11 @@ import nfc
 import ndef
 from nfc.clf import RemoteTarget
 from time import sleep
-from getpass import getpass
 
-from firebase import Firebase
-firebase_config = {
-  "apiKey": "AIzaSyCHb34Qxrj_lh3XU9ARTnew_uImtDeuVso",
-  "authDomain": "fir-auth-451b3.firebaseapp.com",
-  "databaseURL": "https://fir-auth-451b3-default-rtdb.europe-west1.firebasedatabase.app",
-  "storageBucket": "fir-auth-451b3.appspot.com",
-}
-firebase = Firebase(firebase_config)
-auth = firebase.auth()
+import firebase_admin
+from firebase_admin import credentials, auth
+cred = credentials.Certificate("serviceAccountKey.json")
+firebase_admin.initialize_app(cred)
 
 
 def find_tag(clf):
@@ -44,25 +38,23 @@ def write_tag(tag, uid):
         return False
     return True
 
-def get_firebase_uid(email, password):
+def get_firebase_uid(email):
     try:
-        user = auth.sign_in_with_email_and_password(email, password)
-        uid = user["localId"]
+        user = auth.get_user_by_email(email)
+        uid = user.uid
     except:
-        print(f'Error logging in to account "{email}", please try again\n')
+        print(f'Error finding account "{email}", please try again\n')
         return None
-    print(f'Successfully logged in with user "{email}"')
+    print(f'Successfully found user "{email}"')
     print(f'UID: "{uid}"')
     return uid
 
 
 def main():
     uid = None
-    print("Login with Firebase:\n")
     while not uid:
-        email = input("Email: ")
-        password = getpass("Password: ")
-        uid = get_firebase_uid(email, password)
+        email = input("Enter user's firebase email: ")
+        uid = get_firebase_uid(email)
 
     with nfc.ContactlessFrontend('tty:S0:pn532') as clf:
         read = True
