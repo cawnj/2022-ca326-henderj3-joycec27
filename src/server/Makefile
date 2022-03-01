@@ -1,7 +1,7 @@
 #!make
 include .env
 
-all: build run
+all: test build run
 
 run:
 	docker-compose up -d
@@ -9,6 +9,8 @@ stop:
 	docker-compose down
 build:
 	docker-compose build
+test:
+	go test -count 1 ./...
 
 DB_URL := postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/${POSTGRES_DB}?sslmode=disable
 migrate:

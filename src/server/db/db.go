@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	HOST = "sonic-db"
+	HOST = "localhost"
 	PORT = 5432
 )
 
