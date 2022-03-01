@@ -8,6 +8,9 @@ import { auth } from "../firebase";
 import { Card, ThemeProvider } from "react-native-elements";
 import useColorScheme from "../hooks/useColorScheme";
 
+// expo notifications documentation: https://docs.expo.dev/push-notifications/overview/
+
+// default config for when user recieves notification
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -19,12 +22,15 @@ Notifications.setNotificationHandler({
 export default function TabOneScreen({
   navigation,
 }: RootTabScreenProps<"TabOne">) {
+  // react useState vars
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
   const [locationDataString, setLocationDataString] = useState("");
+  // useRef for notifications and response
   const notificationListener = useRef();
   const responseListener = useRef();
 
+  // fetch latest location via POST req
   const fetchLocationData = async () => {
     const firebaseUID = auth.currentUser?.uid;
     const resp = await fetch("https://sonic.cawnj.dev/latestlocation", {
@@ -40,7 +46,7 @@ export default function TabOneScreen({
     const data = await resp.json();
 
     let locationData: string;
-    // set locationDataString if a latest location exists
+    // only set locationDataString if a latest location exists
     if (data.name) {
       const locationName = data.name;
       const prettyDate = data.timestamp
@@ -57,6 +63,7 @@ export default function TabOneScreen({
     setLocationDataString(locationData);
   };
 
+  // useEffect to run funcs on initial render
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>
       setExpoPushToken(token)
@@ -95,6 +102,7 @@ export default function TabOneScreen({
     };
   }, []);
 
+  // return the ui
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Home</Text>
@@ -122,6 +130,7 @@ export default function TabOneScreen({
   );
 }
 
+// register a user for push notifs via expo
 async function registerForPushNotificationsAsync() {
   let token: string | undefined;
   if (Constants.isDevice) {
@@ -139,6 +148,8 @@ async function registerForPushNotificationsAsync() {
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
+
+    // register user with sonic backend
     registerWithBackend(token);
   } else {
     alert("Must use physical device for Push Notifications");
@@ -153,15 +164,16 @@ async function registerForPushNotificationsAsync() {
       lightColor: "#FE9018",
     });
   }
-
   return token;
 }
 
+// register user with backend via POST req
 async function registerWithBackend(token: string) {
   const firebaseUID = auth.currentUser?.uid;
   console.log(firebaseUID);
   console.log(token);
 
+  // send user_id and expoToken to /register endpoint
   fetch("https://sonic.cawnj.dev/register", {
     method: "POST",
     body: JSON.stringify({

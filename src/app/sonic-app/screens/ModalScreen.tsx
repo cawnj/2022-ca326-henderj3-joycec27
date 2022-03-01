@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 export default function ModalScreen() {
   const navigation = useNavigation();
 
+  // send trace request via POST req
   const sendPostRequest = () => {
     const firebaseUID = auth.currentUser?.uid;
     fetch("https://sonic.cawnj.dev/trace", {
@@ -27,6 +28,7 @@ export default function ModalScreen() {
       .catch((error) => {
         console.log(error);
       });
+    // return user to home page after req is executed
     navigation.navigate("Root");
   };
 

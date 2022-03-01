@@ -11,13 +11,18 @@ import {
   TouchableOpacity,
 } from "../components/Themed";
 
+//
+// auth with firebase: https://www.youtube.com/watch?v=ql4J6SpLXZA
+
 export default function LoginScreen() {
+  // react useState vars
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigation = useNavigation();
 
   useEffect(() => {
+    // if a user is signed in, navigate user to homepage
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         navigation.navigate("Root");
@@ -27,6 +32,7 @@ export default function LoginScreen() {
     return unsubscribe;
   }, []);
 
+  // handling a new user signing up using firebase auth
   const handleSignUp = () => {
     auth
       .createUserWithEmailAndPassword(email, password)
@@ -37,6 +43,7 @@ export default function LoginScreen() {
       .catch((error) => alert(error.message));
   };
 
+  // handling a user logging in using firebase auth
   const handleLogin = () => {
     auth
       .signInWithEmailAndPassword(email, password)

@@ -17,6 +17,7 @@ export default function ForgotPasswordScreen() {
 
   const navigation = useNavigation();
 
+  // send user password reset email
   const resetPassword = () => {
     auth.sendPasswordResetEmail(email).then(
       () => {

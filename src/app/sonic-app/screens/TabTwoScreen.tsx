@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 export default function TabTwoScreen() {
   const navigation = useNavigation();
 
+  // signout user and return them to login screen using firebase auth
   const handleSignOut = () => {
     auth
       .signOut()

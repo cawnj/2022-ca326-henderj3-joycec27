@@ -57,6 +57,9 @@ export function View(props: ViewProps) {
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
 }
 
+//
+// custom light/dark mode handler components
+
 export function KeyboardAvoidingView(props: KAVProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
   const backgroundColor = useThemeColor(
