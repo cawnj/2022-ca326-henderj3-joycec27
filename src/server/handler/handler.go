@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	"sonic-server/db"
@@ -11,8 +12,12 @@ import (
 var dbInstance db.Database
 
 func NewHandler(db db.Database) http.Handler {
-	router := chi.NewRouter()
 	dbInstance = db
+	router := chi.NewRouter()
+	router.Get("/health", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "Alive!")
+	})
+
 	router.Route("/user", user)
 	router.Route("/users", users)
 	router.Route("/locations", locations)
