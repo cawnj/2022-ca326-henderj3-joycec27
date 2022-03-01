@@ -10,7 +10,6 @@ import (
 )
 
 const (
-	HOST = "localhost"
 	PORT = 5432
 )
 
@@ -20,10 +19,10 @@ type Database struct {
 
 var ErrNoMatch = fmt.Errorf("no matching record")
 
-func Initialize() (Database, error) {
+func Initialize(host string) (Database, error) {
 	db := Database{}
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		HOST, PORT,
+		host, PORT,
 		os.Getenv("POSTGRES_USER"),
 		os.Getenv("POSTGRES_PASSWORD"),
 		os.Getenv("POSTGRES_DB"),

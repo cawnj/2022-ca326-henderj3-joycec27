@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net"
@@ -8,7 +9,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"context"
 	"time"
 
 	"sonic-server/db"
@@ -23,7 +23,7 @@ func main() {
 		log.Fatalf("Error creating listener: %s", err.Error())
 	}
 
-	db, err := db.Initialize()
+	db, err := db.Initialize("sonic-db")
 	if err != nil {
 		log.Fatalf("Error initializing database: %v", err)
 	}
@@ -33,23 +33,23 @@ func main() {
 	server := &http.Server{
 		Handler: httpHandler,
 	}
-    go func() {
-        server.Serve(listener)
-    }()
+	go func() {
+		server.Serve(listener)
+	}()
 	defer Stop(server)
 	log.Printf("Started server at http://localhost%s", PORT)
 
-    ch := make(chan os.Signal, 1)
-    signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
-    log.Println(fmt.Sprint(<-ch))
-    log.Println("Stopping API server.")
+	ch := make(chan os.Signal, 1)
+	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
+	log.Println(fmt.Sprint(<-ch))
+	log.Println("Stopping API server.")
 }
 
 func Stop(server *http.Server) {
-    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-    defer cancel()
-    if err := server.Shutdown(ctx); err != nil {
-        log.Printf("Could not shut down server correctly: %v\n", err)
-        os.Exit(1)
-    }
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := server.Shutdown(ctx); err != nil {
+		log.Printf("Could not shut down server correctly: %v\n", err)
+		os.Exit(1)
+	}
 }
