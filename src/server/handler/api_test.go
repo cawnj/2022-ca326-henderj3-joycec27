@@ -13,6 +13,11 @@ import (
 	"github.com/steinfletcher/apitest"
 )
 
+const (
+	POSTGRES_HOST = "localhost"
+	POSTGRES_DB   = "test"
+)
+
 var testHandler http.Handler
 var testServer *httptest.Server
 
@@ -20,10 +25,10 @@ func TestMain(m *testing.M) {
 	// load env vars for db connection while testing locally
 	err := godotenv.Load("../.env")
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatalf("Error loading .env file: %v", err)
 	}
 
-	db, err := db.Initialize("localhost")
+	db, err := db.Initialize(POSTGRES_HOST, POSTGRES_DB)
 	if err != nil {
 		log.Fatalf("Error initializing database: %v", err)
 	}
@@ -52,7 +57,7 @@ func TestUser(t *testing.T) {
 		Handler(testHandler).
 		Get("/user").
 		JSON(`{
-			"user_id": "sPxteAo65YhizCxCirkzjDkfE3w1"
+			"user_id": "test_user"
 		}`).
 		Expect(t).
 		Status(http.StatusOK).
@@ -85,7 +90,7 @@ func TestLatestLocation(t *testing.T) {
 		Handler(testHandler).
 		Post("/latestlocation").
 		JSON(`{
-			"user_id": "sPxteAo65YhizCxCirkzjDkfE3w1"
+			"user_id": "test_user"
 		}`).
 		Expect(t).
 		Status(http.StatusOK).

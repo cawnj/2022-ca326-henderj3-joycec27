@@ -19,13 +19,13 @@ type Database struct {
 
 var ErrNoMatch = fmt.Errorf("no matching record")
 
-func Initialize(host string) (Database, error) {
+func Initialize(host string, dbName string) (Database, error) {
 	db := Database{}
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		host, PORT,
 		os.Getenv("POSTGRES_USER"),
 		os.Getenv("POSTGRES_PASSWORD"),
-		os.Getenv("POSTGRES_DB"),
+		dbName,
 	)
 	conn, err := sql.Open("postgres", psqlInfo)
 	if err != nil {

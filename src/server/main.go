@@ -15,7 +15,11 @@ import (
 	"sonic-server/handler"
 )
 
-const PORT = ":8080"
+const (
+	PORT          = ":8080"
+	POSTGRES_HOST = "sonic-db"
+	POSTGRES_DB   = "sonic"
+)
 
 func main() {
 	listener, err := net.Listen("tcp", PORT)
@@ -23,7 +27,7 @@ func main() {
 		log.Fatalf("Error creating listener: %s", err.Error())
 	}
 
-	db, err := db.Initialize("sonic-db")
+	db, err := db.Initialize(POSTGRES_HOST, POSTGRES_DB)
 	if err != nil {
 		log.Fatalf("Error initializing database: %v", err)
 	}
