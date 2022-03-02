@@ -1,4 +1,4 @@
-package handler
+package test
 
 import (
 	"log"
@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"sonic-server/db"
+	"sonic-server/handler"
 
 	"github.com/joho/godotenv"
 	"github.com/steinfletcher/apitest"
@@ -34,7 +35,7 @@ func TestMain(m *testing.M) {
 	}
 	defer db.Conn.Close()
 
-	testHandler = NewHandler(db)
+	testHandler = handler.NewHandler(db)
 	testServer = httptest.NewServer(testHandler)
 	defer testServer.Close()
 
@@ -47,6 +48,7 @@ func TestHealth(t *testing.T) {
 		Handler(testHandler).
 		Get("/health").
 		Expect(t).
+		Body("Alive!").
 		Status(http.StatusOK).
 		End()
 }
@@ -60,6 +62,10 @@ func TestUser(t *testing.T) {
 			"user_id": "test_user"
 		}`).
 		Expect(t).
+		Body(`{
+			"user_id": "test_user",
+			"expo_token": "test_token"
+		}`).
 		Status(http.StatusOK).
 		End()
 }
@@ -70,6 +76,14 @@ func TestUsers(t *testing.T) {
 		Handler(testHandler).
 		Get("/users").
 		Expect(t).
+		Body(`{
+			"users": [
+				{
+					"user_id": "test_user",
+					"expo_token": "test_token"
+				}
+			]
+		}`).
 		Status(http.StatusOK).
 		End()
 }
@@ -80,6 +94,25 @@ func TestLocations(t *testing.T) {
 		Handler(testHandler).
 		Get("/locations").
 		Expect(t).
+		Body(`{
+			"locations": [
+				{
+					"location_id": 1,
+					"name": "The Spire",
+					"coords": "0101000020E61000009A5B21ACC6AC4A40DC9C4A06800A19C0"
+				},
+				{
+					"location_id": 2,
+					"name": "DCU Nubar",
+					"coords": "0101000020E6100000C36169E047B14A40067FBF982D0919C0"
+				},
+				{
+					"location_id": 3,
+					"name": "The Academy",
+					"coords": "0101000020E6100000D6FCF84B8BAC4A40A0A52BD8460C19C0"
+				}
+			]
+		}`).
 		Status(http.StatusOK).
 		End()
 }
@@ -93,6 +126,10 @@ func TestLatestLocation(t *testing.T) {
 			"user_id": "test_user"
 		}`).
 		Expect(t).
+		Body(`{
+			"name": "DCU Nubar",
+			"timestamp": "2022-01-01T16:00:00Z"
+		}`).
 		Status(http.StatusOK).
 		End()
 }

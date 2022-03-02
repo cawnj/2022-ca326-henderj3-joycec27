@@ -10,7 +10,8 @@ stop:
 build:
 	docker-compose build
 test:
-	go test -count 1 ./...
+	go test -count 1 ./test
+.PHONY: all run stop build test
 
 DB_URL := postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/${POSTGRES_DB}?sslmode=disable
 TEST_DB_URL := postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/test?sslmode=disable
@@ -42,3 +43,4 @@ migrate-test-down:
 	-database $(TEST_DB_URL) \
 	-path /migrations \
 	down -all
+.PHONY: migrate migrate-down migrate-test migrate-test-down
