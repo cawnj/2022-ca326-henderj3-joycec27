@@ -24,7 +24,7 @@ func (db Database) GetLocation(locationId int) (*models.Location, error) {
 
 func (db Database) GetAllLocations() (*models.LocationList, error) {
 	locations := &models.LocationList{}
-	rows, err := db.Conn.Query("SELECT * FROM locations ORDER BY location_id DESC")
+	rows, err := db.Conn.Query("SELECT * FROM locations ORDER BY location_id ASC")
 	if err != nil {
 		return locations, err
 	}
