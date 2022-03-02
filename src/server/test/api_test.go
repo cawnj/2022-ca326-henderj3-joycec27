@@ -19,7 +19,9 @@ const (
 	POSTGRES_HOST = "localhost"
 	POSTGRES_DB   = "test"
 
-	TIMESTAMP_REGEX = `^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$`
+	STRING_REGEX    = `^.+$`
+	NUMBER_REGEX    = `^\d+$`
+	TIMESTAMP_REGEX = `^$|^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$`
 )
 
 var testHandler http.Handler
@@ -65,10 +67,12 @@ func TestSingleUser(t *testing.T) {
 			"user_id": "test_user"
 		}`).
 		Expect(t).
-		Body(`{
-			"user_id": "test_user",
-			"expo_token": "test_token"
-		}`).
+		Assert(
+			jsonpath.Chain().
+				Equal(`user_id`, `test_user`).
+				Matches(`expo_token`, STRING_REGEX).
+				End(),
+		).
 		Status(http.StatusOK).
 		End()
 }
@@ -79,14 +83,12 @@ func TestAllUsers(t *testing.T) {
 		Handler(testHandler).
 		Get("/users").
 		Expect(t).
-		Body(`{
-			"users": [
-				{
-					"user_id": "test_user",
-					"expo_token": "test_token"
-				}
-			]
-		}`).
+		Assert(
+			jsonpath.Chain().
+				Matches(`$.users[0].user_id`, STRING_REGEX).
+				Matches(`$.users[0].expo_token`, STRING_REGEX).
+				End(),
+		).
 		Status(http.StatusOK).
 		End()
 }
@@ -97,25 +99,13 @@ func TestAllLocations(t *testing.T) {
 		Handler(testHandler).
 		Get("/locations").
 		Expect(t).
-		Body(`{
-			"locations": [
-				{
-					"location_id": 1,
-					"name": "The Spire",
-					"coords": "0101000020E61000009A5B21ACC6AC4A40DC9C4A06800A19C0"
-				},
-				{
-					"location_id": 2,
-					"name": "DCU Nubar",
-					"coords": "0101000020E6100000C36169E047B14A40067FBF982D0919C0"
-				},
-				{
-					"location_id": 3,
-					"name": "The Academy",
-					"coords": "0101000020E6100000D6FCF84B8BAC4A40A0A52BD8460C19C0"
-				}
-			]
-		}`).
+		Assert(
+			jsonpath.Chain().
+				Matches(`$.locations[0].location_id`, NUMBER_REGEX).
+				Matches(`$.locations[0].name`, STRING_REGEX).
+				Matches(`$.locations[0].coords`, STRING_REGEX).
+				End(),
+		).
 		Status(http.StatusOK).
 		End()
 }
@@ -131,7 +121,7 @@ func TestLatestLocation(t *testing.T) {
 		Expect(t).
 		Assert(
 			jsonpath.Chain().
-				Equal(`name`, `DCU Nubar`).
+				Present(`name`).
 				Matches(`timestamp`, TIMESTAMP_REGEX).
 				End(),
 		).
@@ -152,10 +142,11 @@ func TestEntryLog(t *testing.T) {
 		Expect(t).
 		Assert(
 			jsonpath.Chain().
-				Matches(`entry_id`, `^\d+$`).
+				Matches(`entry_id`, NUMBER_REGEX).
 				Equal(`user_id`, `test_user`).
 				Equal(`location_id`, float64(2)).
 				Matches(`entry_time`, TIMESTAMP_REGEX).
+				Matches(`exit_time`, TIMESTAMP_REGEX).
 				End(),
 		).
 		Status(http.StatusOK).
@@ -194,7 +185,7 @@ func TestRegister(t *testing.T) {
 		Assert(
 			jsonpath.Chain().
 				Equal(`status_code`, float64(201)).
-				Matches(`status_text`, `^user '.+' registered successfully$`).
+				Equal(`status_text`, `user 'test_user' registered successfully`).
 				End(),
 		).
 		Status(http.StatusOK).
