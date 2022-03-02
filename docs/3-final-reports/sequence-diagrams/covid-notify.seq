@@ -1,0 +1,16 @@
+title Sonic Covid Notify
+
+fontawesome f007 user1 #A569BD
+fontawesome f007 user2 #A569BD
+participant frontend #A569BD
+participant backend #skyblue
+fontawesome f1c0 database #skyblue
+participant expo-notif-api #orange
+
+user1->frontend:press "i have covid" button
+frontend->backend:send trace request
+backend->database:get user1's close contacts
+backend<--database:return user1's close contacts
+expo-notif-api<-backend:notify users x, y, z...
+user2<--expo-notif-api:"you are a close contact" notification
+

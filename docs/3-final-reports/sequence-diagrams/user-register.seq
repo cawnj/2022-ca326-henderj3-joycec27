@@ -1,0 +1,16 @@
+title Sonic User Register
+
+fontawesome f007 user #A569BD
+participant frontend #A569BD
+fontawesome f1a0 firebase-api #orange
+participant backend #skyblue
+fontawesome f1c0 database #skyblue
+
+user->frontend:enter details
+frontend->firebase-api:register new user
+frontend<--firebase-api:return firebase uid
+frontend->backend:send firebase uid and notif token
+backend->database:store user info
+backend<--database:store success
+frontend<--backend:register success
+user<--frontend:register success

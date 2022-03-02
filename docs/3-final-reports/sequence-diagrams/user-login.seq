@@ -1,0 +1,10 @@
+title Sonic User Login
+
+fontawesome f007 user #A569BD
+participant frontend #A569BD
+fontawesome f1a0 firebase-api #orange
+
+user->frontend:enter details
+frontend->firebase-api:login user
+frontend<--firebase-api:return firebase uid
+user<--frontend:user login success

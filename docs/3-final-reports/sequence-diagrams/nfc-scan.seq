@@ -1,0 +1,14 @@
+title Sonic NFC Scan
+
+fontawesome f2c2 card #82E0AA
+participant scanner #82E0AA
+
+participant backend #skyblue
+fontawesome f1c0 database #skyblue
+
+
+card->scanner:scan and read uid
+scanner->backend:send uid in entrylog req
+backend->database:store entrylog
+backend<--database:success
+scanner<--backend:success
