@@ -12,11 +12,14 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/steinfletcher/apitest"
+	jsonpath "github.com/steinfletcher/apitest-jsonpath"
 )
 
 const (
 	POSTGRES_HOST = "localhost"
 	POSTGRES_DB   = "test"
+
+	TIMESTAMP_REGEX = `^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$`
 )
 
 var testHandler http.Handler
@@ -53,7 +56,7 @@ func TestHealth(t *testing.T) {
 		End()
 }
 
-func TestUser(t *testing.T) {
+func TestSingleUser(t *testing.T) {
 	apitest.New().
 		Report(apitest.SequenceDiagram()).
 		Handler(testHandler).
@@ -70,7 +73,7 @@ func TestUser(t *testing.T) {
 		End()
 }
 
-func TestUsers(t *testing.T) {
+func TestAllUsers(t *testing.T) {
 	apitest.New().
 		Report(apitest.SequenceDiagram()).
 		Handler(testHandler).
@@ -88,7 +91,7 @@ func TestUsers(t *testing.T) {
 		End()
 }
 
-func TestLocations(t *testing.T) {
+func TestAllLocations(t *testing.T) {
 	apitest.New().
 		Report(apitest.SequenceDiagram()).
 		Handler(testHandler).
@@ -126,10 +129,12 @@ func TestLatestLocation(t *testing.T) {
 			"user_id": "test_user"
 		}`).
 		Expect(t).
-		Body(`{
-			"name": "DCU Nubar",
-			"timestamp": "2022-01-01T16:00:00Z"
-		}`).
+		Assert(
+			jsonpath.Chain().
+				Equal(`name`, `DCU Nubar`).
+				Matches(`timestamp`, TIMESTAMP_REGEX).
+				End(),
+		).
 		Status(http.StatusOK).
 		End()
 }
