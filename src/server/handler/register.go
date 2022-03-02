@@ -26,7 +26,7 @@ func registerUser(w http.ResponseWriter, r *http.Request) {
 	}
 	response := &models.PostResponse{
 		StatusCode: 201,
-		StatusText: fmt.Sprintf("user '%s' registered successfuly", user.UserID),
+		StatusText: fmt.Sprintf("user '%s' registered successfully", user.UserID),
 	}
 	if err := render.Render(w, r, response); err != nil {
 		render.Render(w, r, ServerErrorRenderer(err))
