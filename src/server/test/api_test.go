@@ -138,3 +138,65 @@ func TestLatestLocation(t *testing.T) {
 		Status(http.StatusOK).
 		End()
 }
+
+func TestEntryLog(t *testing.T) {
+	apitest.New().
+		Report(apitest.SequenceDiagram()).
+		Handler(testHandler).
+		Post("/entrylog").
+		JSON(`{
+			"user_id": "test_user",
+			"location_id": 2,
+			"timestamp": "3000-01-01T00:00:00Z"
+		}`).
+		Expect(t).
+		Assert(
+			jsonpath.Chain().
+				Matches(`entry_id`, `^\d+$`).
+				Equal(`user_id`, `test_user`).
+				Equal(`location_id`, float64(2)).
+				Matches(`entry_time`, TIMESTAMP_REGEX).
+				End(),
+		).
+		Status(http.StatusOK).
+		End()
+}
+
+func TestTrace(t *testing.T) {
+	apitest.New().
+		Report(apitest.SequenceDiagram()).
+		Handler(testHandler).
+		Post("/trace").
+		JSON(`{
+			"user_id": "test_user"
+		}`).
+		Expect(t).
+		Assert(
+			jsonpath.Chain().
+				Equal(`status_code`, float64(201)).
+				Matches(`status_text`, `^notified \d+ close contact\(s\)$`).
+				End(),
+		).
+		Status(http.StatusOK).
+		End()
+}
+
+func TestRegister(t *testing.T) {
+	apitest.New().
+		Report(apitest.SequenceDiagram()).
+		Handler(testHandler).
+		Post("/register").
+		JSON(`{
+			"user_id": "test_user",
+			"expo_token": "test_token"
+		}`).
+		Expect(t).
+		Assert(
+			jsonpath.Chain().
+				Equal(`status_code`, float64(201)).
+				Matches(`status_text`, `^user '.+' registered successfully$`).
+				End(),
+		).
+		Status(http.StatusOK).
+		End()
+}
