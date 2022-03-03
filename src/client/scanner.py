@@ -40,18 +40,6 @@ def get_user_id(tag):
     print("Found user id:", user_id)
     return user_id
 
-def get_user_info(user_id):
-    print("\nGetting user info...")
-    payload = {
-        "user_id": user_id,
-    }
-    print("Request:", payload)
-    response = requests.get(url=USER_ENDPOINT, json=payload)
-    try:
-        print("Response:", response.json())
-    except:
-        endpoint_error(USER_ENDPOINT)
-
 def send_entry_log_request(user_id):
     print("\nSending entry log request...")
     payload = {
@@ -75,7 +63,6 @@ def main():
             tag = find_tag(clf)
             if tag.ndef:
                 user_id = get_user_id(tag)
-                get_user_info(user_id)
                 send_entry_log_request(user_id)
             sleep(2)
 
