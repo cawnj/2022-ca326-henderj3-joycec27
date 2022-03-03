@@ -87,6 +87,7 @@ func (db Database) GetLatestEntryLog(userId string) (*models.EntryLog, error) {
 
 func (db Database) GetContactUsers(userId string) (*models.UserList, error) {
 	dt := time.Now().AddDate(0, 0, -3).Format("2006-01-02 15:04:05")
+	contactUserIds := make(map[string]bool)
 	contactUsers := &models.UserList{}
 	query := `SELECT location_id, entry_time, exit_time FROM entry_log
 	WHERE user_id = $1
@@ -139,12 +140,15 @@ func (db Database) GetContactUsers(userId string) (*models.UserList, error) {
 			if err != nil {
 				return contactUsers, err
 			}
-			user, err := db.GetUser(contactUserId)
-			if err != nil {
-				return contactUsers, err
-			}
-			contactUsers.Users = append(contactUsers.Users, *user)
+			contactUserIds[contactUserId] = true
 		}
+	}
+	for id := range contactUserIds {
+		user, err := db.GetUser(id)
+		if err != nil {
+			return contactUsers, err
+		}
+		contactUsers.Users = append(contactUsers.Users, *user)
 	}
 	return contactUsers, nil
 }
