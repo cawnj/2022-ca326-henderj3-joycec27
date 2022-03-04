@@ -2,7 +2,7 @@ The required documentation for your final submission should be placed in this di
 
 This includes your Video Walkthrough and your Final documentation (Technical Specification and User Manual). Details below.
 
-#### Video Walkthrough
+Video Walkthrough link: https://drive.google.com/file/d/1YF2HPG6hz29kTTYo4rPIJ-Qf-OroLSOs/view?usp=sharing
 
 Instructions:
 
