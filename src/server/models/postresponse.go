@@ -2,6 +2,8 @@ package models
 
 import (
 	"net/http"
+
+	"github.com/go-chi/render"
 )
 
 type PostResponse struct {
@@ -13,6 +15,7 @@ func (*PostResponse) Bind(r *http.Request) error {
 	return nil
 }
 
-func (*PostResponse) Render(w http.ResponseWriter, r *http.Request) error {
+func (p *PostResponse) Render(w http.ResponseWriter, r *http.Request) error {
+	render.Status(r, p.StatusCode)
 	return nil
 }

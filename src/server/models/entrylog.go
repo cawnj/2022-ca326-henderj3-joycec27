@@ -3,6 +3,8 @@ package models
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/go-chi/render"
 )
 
 type EntryLog struct {
@@ -30,7 +32,8 @@ func (u *EntryLog) Bind(r *http.Request) error {
 	return nil
 }
 
-func (*EntryLog) Render(w http.ResponseWriter, r *http.Request) error {
+func (e *EntryLog) Render(w http.ResponseWriter, r *http.Request) error {
+	render.Status(r, http.StatusCreated)
 	return nil
 }
 

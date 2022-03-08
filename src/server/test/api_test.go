@@ -149,7 +149,7 @@ func TestEntryLog(t *testing.T) {
 				Matches(`exit_time`, TIMESTAMP_REGEX).
 				End(),
 		).
-		Status(http.StatusOK).
+		Status(http.StatusCreated).
 		End()
 }
 
@@ -168,7 +168,7 @@ func TestTrace(t *testing.T) {
 				Matches(`status_text`, `^notified \d+ close contact\(s\)$`).
 				End(),
 		).
-		Status(http.StatusOK).
+		Status(http.StatusCreated).
 		End()
 }
 
@@ -188,6 +188,6 @@ func TestRegister(t *testing.T) {
 				Equal(`status_text`, `user 'test_user' registered successfully`).
 				End(),
 		).
-		Status(http.StatusOK).
+		Status(http.StatusCreated).
 		End()
 }
